@@ -50,7 +50,7 @@ jobs:
         run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Action"
-          git add .
+          git add -A  # 添加所有更改，包括新文件和修改
           git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
           git push origin main
         env:
