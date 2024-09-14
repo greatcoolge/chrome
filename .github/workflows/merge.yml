@@ -5,6 +5,9 @@ on:
     - cron: '0 0,6,12,18 * * *'  # 每6小时一次
   workflow_dispatch:  # 触发手动事件
 
+permissions:
+  contents: write  # 允许GITHUB_TOKEN进行写操作
+
 jobs:
   merge:
     runs-on: ubuntu-latest
@@ -12,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # 明确使用GITHUB_TOKEN
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -22,7 +27,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run merged proxies script
-        run: python merged_proxies.py  # 新添加的步骤
+        run: python merged_proxies.py
 
       - name: Commit Changes
         run: |
@@ -35,5 +40,4 @@ jobs:
             git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
             git push
           else
-            echo "No changes detected in the repository." 
-          fi
+            echo "No changes detected in the repository."
