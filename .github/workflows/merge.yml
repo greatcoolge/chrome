@@ -29,16 +29,26 @@ jobs:
       - name: Run merged proxies script
         run: python merged_proxies.py
 
-      - name: Commit Changes
+      - name: Check for changes
+        id: check_changes
         run: |
-          if [[ -n "$(git status --porcelain)" ]]; then
-            echo "Changes detected in the repository."
-            git config core.ignorecase false
-            git config --local user.email "actions@github.com"
-            git config --local user.name "GitHub Action"
-            git add .
-            git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
-            git push
+          git status --porcelain > changes.txt
+          if [[ -s changes.txt ]]; then
+            echo "Changes detected."
+            echo "true" > changes_detected.txt
           else
-            echo "No changes detected in the repository."
-          fi  # 结束 if 语句
+            echo "No changes detected."
+            echo "false" > changes_detected.txt
+          fi
+
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changes_detected == 'true'
+        run: |
+          git config core.ignorecase false
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Action"
+          git add .
+          git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
