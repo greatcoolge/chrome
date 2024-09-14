@@ -33,20 +33,15 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
-          git status  # 输出文件状态
           git status --porcelain > changes.txt  # 保存文件更改状态
           if [[ -s changes.txt ]]; then
-            echo "Changes detected."
             echo "true" > changes_detected.txt
           else
-            echo "No changes detected."
             echo "false" > changes_detected.txt
-        continue-on-error: false  # 如果此步骤失败，工作流将停止
-        outputs:
-          changes_detected: ${{ steps.check_changes.outputs.changes_detected }}
+        continue-on-error: false
 
       - name: Commit and push changes
-        if: steps.check_changes.outputs.changes_detected == 'true'
+        if: ${{ steps.check_changes.outputs.changes_detected == 'true' }}
         run: |
           git config core.ignorecase false
           git config user.email "actions@github.com"
