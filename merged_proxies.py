@@ -30,23 +30,23 @@ def process_clash(data, index):
         proxy['name'] = f"{location} {proxy['type']} {index}{i+1}"
     merged_proxies.extend(proxies)
 
-def get_physical_location(address):
-    address = re.sub(':.*', '', address)  # 用正则表达式去除端口部分
-    try:
-        ip_address = socket.gethostbyname(address)
-    except socket.gaierror:
-        ip_address = address
+#def get_physical_location(address):
+#    address = re.sub(':.*', '', address)  # 用正则表达式去除端口部分
+#    try:
+#        ip_address = socket.gethostbyname(address)
+#    except socket.gaierror:
+#        ip_address = address
 
-    try:
-        reader = geoip2.database.Reader('GeoLite2-City.mmdb')  # 这里的路径需要指向你自己的数据库文件
-        response = reader.city(ip_address)
-        country = response.country.name
-        city = response.city.name
-        #return f"{country}_{city}"
-        return f"{country}"
-    except geoip2.errors.AddressNotFoundError as e:
-        print(f"Error: {e}")
-        return "Unknown"
+#    try:
+#        reader = geoip2.database.Reader('GeoLite2-City.mmdb')  # 这里的路径需要指向你自己的数据库文件
+#        response = reader.city(ip_address)
+#        country = response.country.name
+#        city = response.city.name
+#        #return f"{country}_{city}"
+#        return f"{country}"
+#    except geoip2.errors.AddressNotFoundError as e:
+#        print(f"Error: {e}")
+#        return "Unknown"
 
 # 处理sb，待办
 def process_sb(data, index):
@@ -317,23 +317,48 @@ def process_xray(data, index):
 merged_proxies = []
 
 # 将国家代码转换为国旗的函数
+import re
+import socket
+import requests
+import geoip2.database
+import geoip2.errors
+import logging
+
 def country_code_to_flag(country_code):
-    # 将国家代码转为大写并转换为Unicode国旗
     return ''.join(chr(127397 + ord(c)) for c in country_code.upper())
 
-def get_physical_location(server):
+def get_physical_location(server, db_path='/goip/GeoLite2-City.mmdb'):
+    # 优先使用 ipinfo.io API
     try:
         response = requests.get(f"https://ipinfo.io/{server}/json")
         data = response.json()
         country = data.get("country", "Unknown Country")
-        # 返回国旗和国家代码
         if country != "Unknown Country":
             return f"{country_code_to_flag(country)} {country}"
         else:
             return country
     except Exception as e:
-        logging.error(f"Error fetching location for server {server}: {e}")
+        logging.error(f"Error fetching location from ipinfo.io for server {server}: {e}")
+    
+    # 如果 API 请求失败，回退到 GeoLite2-City 数据库
+    try:
+        address = re.sub(':.*', '', server)  # 去掉端口
+        ip_address = socket.gethostbyname(address)
+        reader = geoip2.database.Reader(db_path)
+        response = reader.city(ip_address)
+        country = response.country.name
+        city = response.city.name
+        reader.close()
+        return f"{country}"  # 只返回国家
+    except geoip2.errors.AddressNotFoundError:
         return "Unknown Country"
+    except FileNotFoundError:
+        logging.error(f"Error: GeoLite2-City database '{db_path}' not found.")
+        return "Database not found"
+    except Exception as e:
+        logging.error(f"Unexpected error: {e}")
+        return "Error"
+
 
 
 # 处理不同类型的节点
