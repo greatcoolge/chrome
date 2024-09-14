@@ -5,9 +5,6 @@ on:
     - cron: '0 0,6,12,18 * * *'  # 每6小时一次
   workflow_dispatch:  # 触发手动事件
 
-permissions:
-  contents: write  # 允许GITHUB_TOKEN进行写操作
-
 jobs:
   merge:
     runs-on: ubuntu-latest
@@ -29,16 +26,25 @@ jobs:
       - name: Run merged proxies script
         run: python merged_proxies.py
 
-      - name: Force update a file to trigger commit
+      - name: Update Trigger File
         run: |
           echo "Update triggered at $(date '+%Y-%m-%d %H:%M:%S')" > trigger_update.txt
+          cat trigger_update.txt  # 输出文件内容以便调试
 
       - name: Check for changes
         id: check_changes
         run: |
-          git status --porcelain
+          git status --porcelain > changes.txt
+          if [[ -s changes.txt ]]; then
+            echo "Changes detected."
+            echo "true" > changes_detected.txt
+          else
+            echo "No changes detected."
+            echo "false" > changes_detected.txt
+          fi
 
       - name: Commit and push changes
+        if: steps.check_changes.outputs.changes_detected == 'true'
         run: |
           git config core.ignorecase false
           git config user.email "actions@github.com"
@@ -46,3 +52,5 @@ jobs:
           git add .
           git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
           git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
