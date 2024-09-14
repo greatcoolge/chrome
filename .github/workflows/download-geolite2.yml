@@ -1,0 +1,24 @@
+name: Download GeoLite2-City
+
+on:
+  workflow_dispatch:  # 手动触发工作流
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download GeoLite2-City.mmdb
+        run: |
+          curl -L https://github.com/PrxyHunter/GeoLite2/releases/download/2024.09.13/GeoLite2-City.mmdb -o geoip/GeoLite2-City.mmdb
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Action"
+          git add geoip/GeoLite2-City.mmdb
+          git commit -m "Update GeoLite2-City.mmdb"
+          git push
