@@ -38,6 +38,7 @@ jobs:
             echo "true" > changes_detected.txt
           else
             echo "false" > changes_detected.txt
+          fi
         continue-on-error: false
 
       - name: Commit and push changes
