@@ -41,3 +41,4 @@ jobs:
             git push
           else
             echo "No changes detected in the repository."
+          fi  # 结束 if 语句
