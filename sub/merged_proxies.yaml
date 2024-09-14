@@ -8082,7 +8082,7 @@ proxies:
       Host: xray4.2413762.xyz
 - name: 🇺🇸 US vmess 2
   type: vmess
-  server: 172.64.170.111
+  server: 162.159.45.35
   port: 2082
   uuid: 86e926b9-d67a-4c8f-a35e-024631838a45
   alterId: 0
