@@ -45,13 +45,14 @@ jobs:
         run: git status
 
       - name: Commit and push changes
-        if: steps.check_changes.outputs.changes_detected == 'true'
         run: |
+          git config core.ignorecase false
           git config user.email "actions@github.com"
           git config user.name "GitHub Action"
-          git add -A  # 添加所有更改，包括新文件和修改
-          git status  # 查看当前状态以确保文件被添加
-          git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
+          git add -A
+          git commit -m "Update triggered at $(date '+%Y-%m-%d %H:%M:%S')"
           git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
