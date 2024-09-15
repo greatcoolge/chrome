@@ -1,43 +1,34 @@
 name: Merge Script
 
-on: 
-  workflow_dispatch:
+on:
   schedule:
-    - cron: '0 */12 * * *'
+    - cron: '0 0,6,12,18 * * *'  # 每6小时一次
+  workflow_dispatch:  # 触发手动事件
 
 jobs:
-  update:
+  merge:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          python-version: 3.11  
 
-      - name: Set Up Environment
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-      - name: Run merged proxies script
-        run: |
-          python merged_proxies.py
+      - name: Run merge script
+        run: python meta_merge.py 
 
-      - name: Commit and Push Changes
+      - name: Commit Changes
         run: |
-          git config --global user.email "action@github.com"
-          git config --global user.name "GitHub Action"
-          
-          # Add all changes, even if there are no actual changes
-          git add --all
-          git commit -m "Forced update at $(TZ=UTC-8 date +'%Y-%m-%d %H:%M:%S')（北京时间）" || echo "No actual file changes, but forced commit."
+          git config core.ignorecase false
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Forced update at $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes detected, but forcing commit."
           git push origin HEAD:main --force
-
-      - name: Delete Workflow Runs 
-        uses: Mattraks/delete-workflow-runs@main
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          retain_days: 0
-          keep_minimum_runs: 0
