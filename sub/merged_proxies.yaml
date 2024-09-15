@@ -1364,7 +1364,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 092
+- name: Database not found vmess 092
   type: vmess
   server: fbi.gov
   port: 2086
@@ -1379,7 +1379,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 093
+- name: Database not found vmess 093
   type: vmess
   server: shopify.com
   port: 2086
@@ -1394,7 +1394,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 094
+- name: Database not found vmess 094
   type: vmess
   server: icook.tw
   port: 2086
@@ -1409,7 +1409,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 095
+- name: Database not found vmess 095
   type: vmess
   server: ip.sb
   port: 2086
@@ -1424,7 +1424,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 096
+- name: Database not found vmess 096
   type: vmess
   server: japan.com
   port: 2086
@@ -1439,7 +1439,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 097
+- name: Database not found vmess 097
   type: vmess
   server: malaysia.com
   port: 2086
@@ -1454,7 +1454,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 098
+- name: Database not found vmess 098
   type: vmess
   server: russia.com
   port: 2086
@@ -1469,7 +1469,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 099
+- name: Database not found vmess 099
   type: vmess
   server: singapore.com
   port: 2086
@@ -1484,7 +1484,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 0100
+- name: Database not found vmess 0100
   type: vmess
   server: skk.moe
   port: 2086
@@ -1499,7 +1499,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 0101
+- name: Database not found vmess 0101
   type: vmess
   server: www.visa.com
   port: 2086
@@ -2939,7 +2939,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 292
+- name: Database not found vmess 292
   type: vmess
   server: fbi.gov
   port: 2086
@@ -2954,7 +2954,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 293
+- name: Database not found vmess 293
   type: vmess
   server: shopify.com
   port: 2086
@@ -2969,7 +2969,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 294
+- name: Database not found vmess 294
   type: vmess
   server: icook.tw
   port: 2086
@@ -2984,7 +2984,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 295
+- name: Database not found vmess 295
   type: vmess
   server: ip.sb
   port: 2086
@@ -2999,7 +2999,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 296
+- name: Database not found vmess 296
   type: vmess
   server: japan.com
   port: 2086
@@ -3014,7 +3014,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 297
+- name: Database not found vmess 297
   type: vmess
   server: malaysia.com
   port: 2086
@@ -3029,7 +3029,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 298
+- name: Database not found vmess 298
   type: vmess
   server: russia.com
   port: 2086
@@ -3044,7 +3044,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 299
+- name: Database not found vmess 299
   type: vmess
   server: singapore.com
   port: 2086
@@ -3059,7 +3059,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 2100
+- name: Database not found vmess 2100
   type: vmess
   server: skk.moe
   port: 2086
@@ -3074,7 +3074,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 2101
+- name: Database not found vmess 2101
   type: vmess
   server: www.visa.com
   port: 2086
@@ -3974,7 +3974,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Database not found vmess 552
+- name: 🇺🇸 US vmess 552
   type: vmess
   server: 162.159.140.19
   port: 2086
@@ -4574,7 +4574,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 592
+- name: Database not found vmess 592
   type: vmess
   server: fbi.gov
   port: 2086
@@ -4589,7 +4589,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 593
+- name: Database not found vmess 593
   type: vmess
   server: shopify.com
   port: 2086
@@ -4604,7 +4604,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 594
+- name: Database not found vmess 594
   type: vmess
   server: icook.tw
   port: 2086
@@ -4619,7 +4619,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 595
+- name: Database not found vmess 595
   type: vmess
   server: ip.sb
   port: 2086
@@ -4634,7 +4634,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 596
+- name: Database not found vmess 596
   type: vmess
   server: japan.com
   port: 2086
@@ -4649,7 +4649,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 597
+- name: Database not found vmess 597
   type: vmess
   server: malaysia.com
   port: 2086
@@ -4664,7 +4664,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 598
+- name: Database not found vmess 598
   type: vmess
   server: russia.com
   port: 2086
@@ -4679,7 +4679,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 599
+- name: Database not found vmess 599
   type: vmess
   server: singapore.com
   port: 2086
@@ -4694,7 +4694,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 5100
+- name: Database not found vmess 5100
   type: vmess
   server: skk.moe
   port: 2086
@@ -4709,7 +4709,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 5101
+- name: Database not found vmess 5101
   type: vmess
   server: www.visa.com
   port: 2086
@@ -6149,7 +6149,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 792
+- name: Database not found vmess 792
   type: vmess
   server: fbi.gov
   port: 2086
@@ -6164,7 +6164,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 793
+- name: Database not found vmess 793
   type: vmess
   server: shopify.com
   port: 2086
@@ -6179,7 +6179,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 794
+- name: Database not found vmess 794
   type: vmess
   server: icook.tw
   port: 2086
@@ -6194,7 +6194,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 795
+- name: Database not found vmess 795
   type: vmess
   server: ip.sb
   port: 2086
@@ -6209,7 +6209,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 796
+- name: Database not found vmess 796
   type: vmess
   server: japan.com
   port: 2086
@@ -6224,7 +6224,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 797
+- name: Database not found vmess 797
   type: vmess
   server: malaysia.com
   port: 2086
@@ -6239,7 +6239,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 798
+- name: Database not found vmess 798
   type: vmess
   server: russia.com
   port: 2086
@@ -6254,7 +6254,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 799
+- name: Database not found vmess 799
   type: vmess
   server: singapore.com
   port: 2086
@@ -6269,7 +6269,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 7100
+- name: Database not found vmess 7100
   type: vmess
   server: skk.moe
   port: 2086
@@ -6284,7 +6284,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 7101
+- name: Database not found vmess 7101
   type: vmess
   server: www.visa.com
   port: 2086
@@ -7664,7 +7664,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 892
+- name: Database not found vmess 892
   type: vmess
   server: fbi.gov
   port: 2086
@@ -7679,7 +7679,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 893
+- name: Database not found vmess 893
   type: vmess
   server: shopify.com
   port: 2086
@@ -7694,7 +7694,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 894
+- name: Database not found vmess 894
   type: vmess
   server: icook.tw
   port: 2086
@@ -7709,7 +7709,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 895
+- name: Database not found vmess 895
   type: vmess
   server: ip.sb
   port: 2086
@@ -7724,7 +7724,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 896
+- name: Database not found vmess 896
   type: vmess
   server: japan.com
   port: 2086
@@ -7739,7 +7739,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 897
+- name: Database not found vmess 897
   type: vmess
   server: malaysia.com
   port: 2086
@@ -7754,7 +7754,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 898
+- name: Database not found vmess 898
   type: vmess
   server: russia.com
   port: 2086
@@ -7769,7 +7769,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 899
+- name: Database not found vmess 899
   type: vmess
   server: singapore.com
   port: 2086
@@ -7784,7 +7784,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 8100
+- name: Database not found vmess 8100
   type: vmess
   server: skk.moe
   port: 2086
@@ -7799,7 +7799,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: Unknown Country vmess 8101
+- name: Database not found vmess 8101
   type: vmess
   server: www.visa.com
   port: 2086
@@ -7930,7 +7930,7 @@ proxies:
   skip-cert-verify: true
   alpn:
   - h3
-- name: Unknown Country hysteria 01
+- name: Database not found hysteria 01
   type: hysteria
   server: hy2.dtku47.xyz
   port: 15566
@@ -7940,7 +7940,7 @@ proxies:
   protocol: udp
   up: 50 Mbps
   down: 100 Mbps
-- name: Unknown Country hysteria 11
+- name: Database not found hysteria 11
   type: hysteria
   server: clash1.dtku47.xyz
   port: 11223
@@ -7950,7 +7950,7 @@ proxies:
   protocol: udp
   up: 50 Mbps
   down: 100 Mbps
-- name: Unknown Country hysteria 21
+- name: Database not found hysteria 21
   type: hysteria
   server: hy2.dtku47.xyz
   port: 15566
