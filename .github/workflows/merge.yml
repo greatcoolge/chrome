@@ -2,8 +2,8 @@ name: Merge Script
 
 on:
   schedule:
-    - cron: '0 0,6,12,18 * * *'  # 每6小时一次
-  workflow_dispatch:  # 触发手动事件
+    - cron: '0 0,6,12,18 * * *'  # 每6小时执行一次
+  workflow_dispatch:  # 手动触发事件
 
 jobs:
   merge:
@@ -22,13 +22,23 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run merge script
-        run: python merged_proxies.py 
+        run: |
+          python meta_merge.py
+          echo "Files in ./sub directory:"
+          ls -la ./sub
+          echo "Content of merged_proxies.yaml:"
+          cat ./sub/merged_proxies.yaml
 
       - name: Commit Changes
         run: |
-          git config core.ignorecase false
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Action"
-          git add .
-          git commit -m "Forced update at $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes detected, but forcing commit."
-          git push origin HEAD:main --force
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "Changes detected in the repository."
+            git config core.ignorecase false
+            git config --local user.email "actions@github.com"
+            git config --local user.name "GitHub Action"
+            git add .
+            git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
+            git push
+          else
+            echo "No changes detected in the repository."
+          fi
