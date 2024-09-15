@@ -40,17 +40,6 @@ def process_clash(data, index):
         proxy['name'] = f"{location} {proxy['type']} {index}{i+1}"
     merged_proxies.extend(proxies)
 
-def country_code_to_flag(country_code):
-    return ''.join(chr(127397 + ord(c)) for c in country_code.upper())
-
-
-
-import geoip2.database
-import socket
-import re
-import requests
-import logging
-
 def get_physical_location(address):
     address = re.sub(':.*', '', address)  # 去掉端口部分
     try:
