@@ -45,48 +45,43 @@ def country_code_to_flag(country_code):
 
 
 
+import geoip2.database
+import socket
+import re
+import requests
+import logging
+
 def get_physical_location(address):
-    address = re.sub(':.*', '', address)  # 去掉端口
+    address = re.sub(':.*', '', address)  # 去掉端口部分
+    try:
+        # 尝试使用 ipinfo.io API 获取国家
+        response = requests.get(f"https://ipinfo.io/{address}/json")
+        data = response.json()
+        country = data.get("country", "Unknown Country")
+        return country
+    except Exception as e:
+        logging.error(f"Error fetching location from ipinfo.io for address {address}: {e}")
+
+    # 如果 API 请求失败，回退到 GeoLite2-City 数据库
     try:
         ip_address = socket.gethostbyname(address)
-    except socket.gaierror:
-        ip_address = address
-
-    try:
-        # 确保路径正确
         reader = geoip2.database.Reader('geoip/GeoLite2-City.mmdb')
         response = reader.city(ip_address)
         country = response.country.name
-        city = response.city.name
-        return f"{country}_{city}"
+        return country
     except geoip2.errors.AddressNotFoundError as e:
-        print(f"GeoLite2 database error: {e}")
+        logging.error(f"GeoLite2 database error: {e}")
         return "Unknown"
     except FileNotFoundError:
-        print("GeoLite2 database file not found.")
+        logging.error("GeoLite2 database file not found.")
         return "Database not found"
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        logging.error(f"Unexpected error: {e}")
         return "Error"
     finally:
-        reader.close()  # 确保数据库文件被关闭
+        if 'reader' in locals():
+            reader.close()  # 确保数据库文件被关闭
 
-# 添加获取物理位置函数
-def get_physical_location(server):
-    try:
-        response = requests.get(f"https://ipinfo.io/{server}/json")
-        data = response.json()
-        country = data.get("country", "Unknown Country")
-        city = data.get("city", "")
-
-        # 确保返回的格式为 "US New York" 或者 "US"
-        if city:
-            return f"{country} {city}"
-        else:
-            return country
-    except Exception as e:
-        logging.error(f"Error fetching location for server {server}: {e}")
-        return "Unknown Country"
 # 处理sb，待办
 def process_sb(data, index):
     try:
