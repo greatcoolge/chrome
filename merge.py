@@ -31,12 +31,10 @@ def get_physical_location(address):
         ip_address = address
 
     try:
-        reader = geoip2.database.Reader('GeoLite2-City.mmdb')  # 这里的路径需要指向你自己的数据库文件
-        response = reader.city(ip_address)
-        country = response.country.name
-        city = response.city.name
-        #return f"{country}_{city}"
-        return f"{country}"
+        reader = geoip2.database.Reader('GeoLite2-Country.mmdb')  # 指向你的 GeoLite2-Country.mmdb 数据库文件路径
+        response = reader.country(ip_address)  # 使用 country 方法获取国家信息
+        country = response.country.name  # 提取国家名称
+        return f"{country}"  # 返回国家名称
     except geoip2.errors.AddressNotFoundError as e:
         print(f"Error: {e}")
         return "Unknown"
