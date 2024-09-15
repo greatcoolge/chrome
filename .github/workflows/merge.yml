@@ -27,14 +27,14 @@ jobs:
         run: |
           python merged_proxies.py
           cat ./sub/merged_proxies.yaml
-      
-      - name: Show merged_proxies.yaml content
-        run: cat ./sub/merged_proxies.yaml
 
-      - name: Check file content
+      - name: Check file content and Git status
         run: |
-          cat ./sub/merged_proxies.yaml
+          echo "Files in sub directory:"
           ls -la ./sub
+          echo "Content of merged_proxies.yaml:"
+          cat ./sub/merged_proxies.yaml
+          echo "Git status:"
           git status
 
       - name: Check for changes
@@ -54,7 +54,7 @@ jobs:
 
       - name: List files in the repository
         run: ls -la
-  
+
       - name: Check git diff
         run: git diff
 
