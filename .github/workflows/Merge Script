@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -23,35 +21,24 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run merged proxies script
-        run: python merged_proxies.py
+      - name: Run merge script
+        run: python meta_merge.py 
 
-      - name: Update Trigger File
-        run: echo "Update triggered at $(date '+%Y-%m-%d %H:%M:%S')" > trigger_update.txt
-
-      - name: Check for changes
-        id: check_changes
+      - name: Commit Changes
         run: |
-          git status --porcelain > changes.txt
-          if [[ -s changes.txt ]]; then
-            echo "Changes detected."
-            echo "true" > changes_detected.txt
+          git config core.ignorecase false
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # 检查是否有更改
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Changes detected in the repository."
+            git add .
+            git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
           else
-            echo "No changes detected."
-            echo "false" > changes_detected.txt
+            echo "No changes detected. Creating an empty commit."
+            git commit --allow-empty -m "Forced update at $(date '+%Y-%m-%d %H:%M:%S')"
           fi
-
-      - name: Show git status
-        run: git status
-
-      - name: Commit and push changes
-        if: steps.check_changes.outputs.changes_detected == 'true'
-        run: |
-          git config user.email "actions@github.com"
-          git config user.name "GitHub Action"
-          git add -A  # 添加所有更改，包括新文件和修改
-          git status  # 查看当前状态以确保文件被添加
-          git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
-          git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+          # 强制推送
+          git push origin HEAD:main --force
