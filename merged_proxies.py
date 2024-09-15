@@ -40,7 +40,7 @@ def process_clash(data, index):
 def country_code_to_flag(country_code):
     return ''.join(chr(127397 + ord(c)) for c in country_code.upper())
 
-def get_physical_location(server, db_path='/goip/GeoLite2-City.mmdb'):
+def get_physical_location(server, db_path='/geoip/GeoLite2-City.mmdb'):
     # 优先使用 ipinfo.io API
     try:
         response = requests.get(f"https://ipinfo.io/{server}/json")
