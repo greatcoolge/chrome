@@ -1,73 +1,43 @@
 name: Merge Script
 
-on:
+on: 
+  workflow_dispatch:
   schedule:
-    - cron: '0 0,6,12,18 * * *'  # 每6小时一次
-  workflow_dispatch:  # 触发手动事件
+    - cron: '0 */12 * * *'
 
 jobs:
-  merge:
+  update:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.11  
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Set Up Environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
 
       - name: Run merged proxies script
         run: |
           python merged_proxies.py
-          cat ./sub/merged_proxies.yaml
 
-      - name: Check file content and Git status
+      - name: Commit and Push Changes
         run: |
-          echo "Files in sub directory:"
-          ls -la ./sub
-          echo "Content of merged_proxies.yaml:"
-          cat ./sub/merged_proxies.yaml
-          echo "Git status:"
-          git status
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          
+          # Add all changes, even if there are no actual changes
+          git add --all
+          git commit -m "Forced update at $(TZ=UTC-8 date +'%Y-%m-%d %H:%M:%S')（北京时间）" || echo "No actual file changes, but forced commit."
+          git push origin HEAD:main --force
 
-      - name: Check for changes
-        id: check_changes
-        run: |
-          git config user.email "actions@github.com"
-          git config user.name "GitHub Action"
-          git add -A
-          git diff --cached --quiet || echo "Changes detected" > changes_detected.txt
-          if [ -s changes_detected.txt ]; then
-            echo "Changes detected."
-            echo "::set-output name=changes_detected::true"
-          else
-            echo "No changes detected."
-            echo "::set-output name=changes_detected::false"
-          fi
-
-      - name: List files in the repository
-        run: ls -la
-
-      - name: Check git diff
-        run: git diff
-
-      - name: Show git diff
-        run: git diff --cached
-
-      - name: Show git status
-        run: git status
-
-      - name: Commit and push changes
-        if: steps.check_changes.outputs.changes_detected == 'true'
-        run: |
-          git commit -m "Update triggered at $(date '+%Y-%m-%d %H:%M:%S')"
-          git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Delete Workflow Runs 
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          retain_days: 0
+          keep_minimum_runs: 0
