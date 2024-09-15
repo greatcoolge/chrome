@@ -22,6 +22,6 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Action"
-          git add geoip/GeoLite2-City.mmdb
+          git add GeoLite2-City.mmdb
           git commit -m "Update GeoLite2-City.mmdb"
           git push
