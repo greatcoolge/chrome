@@ -72,7 +72,7 @@ def get_physical_location(address):
             reader.close()  # 确保数据库文件被关闭
 
 # 处理sb，待办
-def process_singbox(data, index):
+def process_sb(data, index):
     try:
         json_data = json.loads(data)
         outbounds = json_data.get("outbounds", [])
