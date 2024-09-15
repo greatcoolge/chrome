@@ -46,23 +46,30 @@ def country_code_to_flag(country_code):
 
 
 def get_physical_location(address):
-    address = re.sub(':.*', '', address)  # 用正则表达式去除端口部分
+    address = re.sub(':.*', '', address)  # 去掉端口
     try:
         ip_address = socket.gethostbyname(address)
     except socket.gaierror:
         ip_address = address
 
     try:
-        reader = geoip2.database.Reader('geoip/GeoLite2-City.mmdb')  # 这里的路径需要指向你自己的数据库文件
+        # 确保路径正确
+        reader = geoip2.database.Reader('geoip/GeoLite2-City.mmdb')
         response = reader.city(ip_address)
         country = response.country.name
         city = response.city.name
         return f"{country}_{city}"
-        return f"{country}"
     except geoip2.errors.AddressNotFoundError as e:
-        print(f"Error: {e}")
+        print(f"GeoLite2 database error: {e}")
         return "Unknown"
-
+    except FileNotFoundError:
+        print("GeoLite2 database file not found.")
+        return "Database not found"
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return "Error"
+    finally:
+        reader.close()  # 确保数据库文件被关闭
 # 处理sb，待办
 def process_sb(data, index):
     try:
