@@ -3974,7 +3974,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip1.1789034.xyz
-- name: 🇺🇸 US vmess 552
+- name: Database not found vmess 552
   type: vmess
   server: 162.159.140.19
   port: 2086
