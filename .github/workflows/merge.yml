@@ -29,6 +29,9 @@ jobs:
           echo "Content of merged_proxies.yaml:"
           cat ./sub/merged_proxies.yaml
 
+      - name: Run shadowrocket merge script
+        run: python merge.py
+      
       - name: Commit Changes
         run: |
           if [[ -n "$(git status --porcelain)" ]]; then
