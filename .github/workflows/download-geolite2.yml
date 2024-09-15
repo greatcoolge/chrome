@@ -1,4 +1,4 @@
-name: Download GeoLite2-City
+name: Download GeoLite2-Country
 
 on:
   workflow_dispatch:  # 手动触发工作流
@@ -13,7 +13,7 @@ jobs:
 
       - name: Download GeoLite2-Country.mmdb
         run: |
-          curl -L https://raw.githubusercontent.com/P3TERX/GeoLite.mmdb/download/GeoLite2-Country.mmdb -o GeoLite2-City.mmdb
+          curl -L https://raw.githubusercontent.com/P3TERX/GeoLite.mmdb/download/GeoLite2-Country.mmdb -o GeoLite2-Country.mmdbdb
 
       - name: Commit changes
         run: |
