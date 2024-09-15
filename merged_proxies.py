@@ -70,6 +70,23 @@ def get_physical_location(address):
         return "Error"
     finally:
         reader.close()  # 确保数据库文件被关闭
+
+# 添加获取物理位置函数
+def get_physical_location(server):
+    try:
+        response = requests.get(f"https://ipinfo.io/{server}/json")
+        data = response.json()
+        country = data.get("country", "Unknown Country")
+        city = data.get("city", "")
+
+        # 确保返回的格式为 "US New York" 或者 "US"
+        if city:
+            return f"{country} {city}"
+        else:
+            return country
+    except Exception as e:
+        logging.error(f"Error fetching location for server {server}: {e}")
+        return "Unknown Country"
 # 处理sb，待办
 def process_sb(data, index):
     try:
