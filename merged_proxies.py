@@ -72,43 +72,89 @@ def get_physical_location(address):
             reader.close()  # 确保数据库文件被关闭
 
 # 处理sb，待办
-def process_sb(data, index):
+def process_singbox(data, index):
     try:
         json_data = json.loads(data)
-        # 处理 shadowtls 数据
+        outbounds = json_data.get("outbounds", [])
 
-        # 提取所需字段
-        method = json_data["outbounds"][0]["method"]
-        password = json_data["outbounds"][0]["password"]
-        server = json_data["outbounds"][1]["server"]
-        server_port = json_data["outbounds"][1]["server_port"]
-        server_name = json_data["outbounds"][1]["tls"]["server_name"]
-        shadowtls_password = json_data["outbounds"][1]["password"]
-        version = json_data["outbounds"][1]["version"]
-        location = get_physical_location(server)
-        name = f"{location} ss {index}"
-        # 创建当前网址的proxy字典
-        proxy = {
-            "name": name,
-            "type": "ss",
-            "server": server,
-            "port": server_port,
-            "cipher": method,
-            "password": password,
-            "plugin": "shadow-tls",
-            "client-fingerprint": "chrome",
-            "plugin-opts": {
-                "host": server_name,
-                "password": shadowtls_password,
-                "version": int(version)
+        for outbound in outbounds:
+            proxy_type = outbound.get("type")
+            server = outbound.get("server")
+            server_port = outbound.get("server_port")
+            tag = outbound.get("tag")
+            uuid = outbound.get("uuid", "")
+            flow = outbound.get("flow", "")
+            transport = outbound.get("transport", {})
+            path = transport.get("path", "")
+            headers = transport.get("headers", {})
+            service_name = transport.get("service_name", "")
+            transport_type = transport.get("type", "ws")  # 默认 ws 传输类型
+
+            tls = outbound.get("tls", {})
+            tls_enabled = tls.get("enabled", False)
+            server_name = tls.get("server_name", "")
+            utls = tls.get("utls", {})
+            fingerprint = utls.get("fingerprint", "chrome") if utls.get("enabled", False) else None
+
+            # 如果有 Reality 配置
+            reality = tls.get("reality", {})
+            reality_enabled = reality.get("enabled", False)
+            reality_public_key = reality.get("public_key", "")
+            reality_short_id = reality.get("short_id", "")
+
+            location = get_physical_location(server)  # 获取服务器的物理位置
+            name = f"{location} {proxy_type} {index}"
+
+            # 根据不同的 proxy 类型构建代理字典
+            proxy = {
+                "name": name,
+                "type": proxy_type,
+                "server": server,
+                "port": server_port,
+                "tls": tls_enabled,
+                "client-fingerprint": fingerprint,
+                "servername": server_name,
             }
-        }
 
-        # 将当前proxy字典添加到所有proxies列表中
-        merged_proxies.append(proxy)
+            if proxy_type == "vmess":
+                # VMess 特有字段
+                security = outbound.get("security", "auto")
+                proxy.update({
+                    "uuid": uuid,
+                    "security": security,
+                    "network": transport_type,
+                    "ws-opts": {
+                        "path": path,
+                        "headers": headers
+                    }
+                })
+            elif proxy_type == "vless":
+                # VLESS 特有字段
+                proxy.update({
+                    "uuid": uuid,
+                    "flow": flow,
+                    "network": transport_type,
+                    "ws-opts": {
+                        "path": path,
+                        "headers": headers
+                    },
+                    "grpc-opts": {
+                        "service-name": service_name
+                    },
+                    "reality-opts": {
+                        "enabled": reality_enabled,
+                        "public-key": reality_public_key,
+                        "short-id": reality_short_id
+                    }
+                })
+
+            # 将当前 proxy 字典添加到代理列表中
+            merged_proxies.append(proxy)
 
     except Exception as e:
-        logging.error(f"Error processing shadowtls data for index {index}: {e}")
+        logging.error(f"Error processing data for index {index}: {e}")
+
+
 
 def process_hysteria(data, index):
     try:
@@ -342,6 +388,7 @@ merged_proxies = []
 # 处理不同类型的节点
 process_urls('./urls/clash_urls.txt', process_clash)
 process_urls('./urls/hysteria_urls.txt', process_hysteria)
+process_urls('./urls/sb_urls.txt', process_sb)
 process_urls('./urls/clashmeta.txt', process_clash)
 process_urls('./urls/hysteria2_urls.txt', process_hysteria2)
 process_urls('./urls/xray_urls.txt', process_xray)
