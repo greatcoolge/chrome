@@ -23,7 +23,7 @@ jobs:
 
       - name: Run merge script
         run: |
-          python meta_merge.py
+          python merged_proxies.py
           echo "Files in ./sub directory:"
           ls -la ./sub
           echo "Content of merged_proxies.yaml:"
