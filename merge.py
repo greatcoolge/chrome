@@ -40,11 +40,7 @@ def get_physical_location(address):
     except geoip2.errors.AddressNotFoundError as e:
         print(f"Error: {e}")
         return "Unknown"
-#提取clash节点
-def get_physical_location(server):
-    # 这个函数用于获取服务器的物理位置
-    # 这里是一个示例实现，你需要根据实际情况修改
-    return "UnknownLocation"
+
 
 def process_clash(data, index):
     # 解析YAML格式的内容
