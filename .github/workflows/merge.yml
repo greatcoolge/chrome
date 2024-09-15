@@ -37,7 +37,8 @@ jobs:
             git config --local user.email "actions@github.com"
             git config --local user.name "GitHub Action"
             git add .
-            git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
+            git commit -m "Updated at $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M %Z')"
+
             git push
           else
             echo "No changes detected in the repository."
