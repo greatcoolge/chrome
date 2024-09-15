@@ -373,3 +373,26 @@ with open('./sub/merged_proxies.yaml', 'w', encoding='utf-8') as file:
     yaml.dump({'proxies': merged_proxies}, file, sort_keys=False, allow_unicode=True)
 
 print("聚合完成")
+
+# 你的主要处理代码
+
+# 添加调试信息
+import os
+
+# 打印 ./sub 目录中的文件
+print("Files in ./sub directory:")
+for root, dirs, files in os.walk('./sub'):
+    for file in files:
+        print(os.path.join(root, file))
+
+# 打印 merged_proxies.yaml 文件的内容
+print("\nContent of merged_proxies.yaml:")
+try:
+    with open('./sub/merged_proxies.yaml', 'r') as file:
+        print(file.read())
+except FileNotFoundError:
+    print("merged_proxies.yaml file not found.")
+except Exception as e:
+    print(f"Error reading file: {e}")
+
+
