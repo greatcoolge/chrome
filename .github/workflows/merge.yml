@@ -26,33 +26,24 @@ jobs:
       - name: Run merged proxies script
         run: python merged_proxies.py
 
-      - name: Update Trigger File
-        run: echo "Update triggered at $(date '+%Y-%m-%d %H:%M:%S')" > trigger_update.txt
-
       - name: Check for changes
         id: check_changes
         run: |
-          git status --porcelain > changes.txt
-          if [[ -s changes.txt ]]; then
-            echo "Changes detected."
-            echo "true" > changes_detected.txt
-          else
-            echo "No changes detected."
-            echo "false" > changes_detected.txt
-          fi
-
-      - name: Show git status
-        run: git status
-
-      - name: Commit and push changes
-        run: |
-          git config core.ignorecase false
           git config user.email "actions@github.com"
           git config user.name "GitHub Action"
           git add -A
+          git diff --cached --quiet || echo "Changes detected" > changes_detected.txt
+          if [[ -f changes_detected.txt ]]; then
+            echo "Changes detected."
+          else
+            echo "No changes detected."
+            exit 0
+          fi
+
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changes_detected == 'true'
+        run: |
           git commit -m "Update triggered at $(date '+%Y-%m-%d %H:%M:%S')"
           git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
