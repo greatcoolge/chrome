@@ -29,6 +29,11 @@ jobs:
       - name: Show merged_proxies.yaml content
         run: cat ./sub/merged_proxies.yaml
 
+      - name: Check file content
+        run: |
+          cat ./sub/merged_proxies.yaml
+          git status
+
       - name: Check for changes
         id: check_changes
         run: |
@@ -36,12 +41,20 @@ jobs:
           git config user.name "GitHub Action"
           git add -A
           git diff --cached --quiet || echo "Changes detected" > changes_detected.txt
-          if [[ -f changes_detected.txt ]]; then
+          if [ -s changes_detected.txt ]; then
             echo "Changes detected."
+            echo "::set-output name=changes_detected::true"
           else
             echo "No changes detected."
-            exit 0
+            echo "::set-output name=changes_detected::false"
           fi
+
+
+      - name: List files in the repository
+        run: ls -la
+  
+      - name: Check git diff
+        run: git diff
 
       - name: Show git diff
         run: git diff --cached
