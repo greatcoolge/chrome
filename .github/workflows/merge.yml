@@ -23,8 +23,19 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Debug Info
+        run: |
+          echo "Git status:"
+          git status
+          echo "Git diff:"
+          git diff
+          echo "Git diff --cached:"
+          git diff --cached
+
       - name: Run merged proxies script
-        run: python merged_proxies.py
+        run: |
+          python merged_proxies.py
+          cat ./sub/merged_proxies.yaml
 
       - name: Show merged_proxies.yaml content
         run: cat ./sub/merged_proxies.yaml
@@ -32,6 +43,7 @@ jobs:
       - name: Check file content
         run: |
           cat ./sub/merged_proxies.yaml
+          ls -la ./sub
           git status
 
       - name: Check for changes
@@ -49,10 +61,9 @@ jobs:
             echo "::set-output name=changes_detected::false"
           fi
 
-
       - name: List files in the repository
         run: ls -la
-  
+
       - name: Check git diff
         run: git diff
 
