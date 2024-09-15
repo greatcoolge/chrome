@@ -386,8 +386,8 @@ def process_xray(data, index):
 merged_proxies = []
 
 # 处理不同类型的节点
-# process_urls('./urls/clash_urls.txt', process_clash)
-process_urls('./urls/hysteria_urls.txt', process_hysteria)
+process_urls('./urls/clash_urls.txt', process_clash)
+# process_urls('./urls/hysteria_urls.txt', process_hysteria)
 process_urls('./urls/sb_urls.txt', process_sb)
 # process_urls('./urls/clashmeta.txt', process_clash)
 process_urls('./urls/hysteria2_urls.txt', process_hysteria2)
