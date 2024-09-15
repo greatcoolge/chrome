@@ -44,25 +44,25 @@ def get_physical_location(server, db_path='/goip/GeoLite2-City.mmdb'):
     # 优先使用 ipinfo.io API
     try:
         response = requests.get(f"https://ipinfo.io/{server}/json")
+        response.raise_for_status()  # Raise an HTTPError for bad responses
         data = response.json()
         country = data.get("country", "Unknown Country")
         if country != "Unknown Country":
             return f"{country_code_to_flag(country)} {country}"
         else:
             return country
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         logging.error(f"Error fetching location from ipinfo.io for server {server}: {e}")
     
     # 如果 API 请求失败，回退到 GeoLite2-City 数据库
     try:
         address = re.sub(':.*', '', server)  # 去掉端口
         ip_address = socket.gethostbyname(address)
-        reader = geoip2.database.Reader(db_path)
-        response = reader.city(ip_address)
-        country = response.country.name
-        city = response.city.name
-        reader.close()
-        return f"{country}"  # 只返回国家
+        with geoip2.database.Reader(db_path) as reader:
+            response = reader.city(ip_address)
+            country = response.country.name
+            city = response.city.name
+            return f"{country}"  # 只返回国家
     except geoip2.errors.AddressNotFoundError:
         return "Unknown Country"
     except FileNotFoundError:
@@ -71,6 +71,7 @@ def get_physical_location(server, db_path='/goip/GeoLite2-City.mmdb'):
     except Exception as e:
         logging.error(f"Unexpected error: {e}")
         return "Error"
+
 #def get_physical_location(address):
 #    address = re.sub(':.*', '', address)  # 用正则表达式去除端口部分
 #    try:
