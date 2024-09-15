@@ -11,12 +11,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create directory
-        run: mkdir -p geoip
-
       - name: Download GeoLite2-City.mmdb
         run: |
-          curl -L https://github.com/PrxyHunter/GeoLite2/releases/download/2024.09.13/GeoLite2-City.mmdb -o geoip/GeoLite2-City.mmdb
+          curl -L https://github.com/PrxyHunter/GeoLite2/releases/download/2024.09.13/GeoLite2-City.mmdb -o GeoLite2-City.mmdb
 
       - name: Commit changes
         run: |
