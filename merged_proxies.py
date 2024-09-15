@@ -13,6 +13,9 @@ import requests
 import geoip2.database
 import geoip2.errors
 import logging
+# 添加调试信息
+import os
+
 # 提取节点
 def process_urls(url_file, processor):
     try:
@@ -42,23 +45,23 @@ def country_code_to_flag(country_code):
 
 
 
-#def get_physical_location(address):
-#    address = re.sub(':.*', '', address)  # 用正则表达式去除端口部分
-#    try:
-#        ip_address = socket.gethostbyname(address)
-#    except socket.gaierror:
-#        ip_address = address
+def get_physical_location(address):
+    address = re.sub(':.*', '', address)  # 用正则表达式去除端口部分
+    try:
+        ip_address = socket.gethostbyname(address)
+    except socket.gaierror:
+        ip_address = address
 
-#    try:
-#        reader = geoip2.database.Reader('GeoLite2-City.mmdb')  # 这里的路径需要指向你自己的数据库文件
-#        response = reader.city(ip_address)
-#        country = response.country.name
-#        city = response.city.name
-#        #return f"{country}_{city}"
-#        return f"{country}"
-#    except geoip2.errors.AddressNotFoundError as e:
-#        print(f"Error: {e}")
-#        return "Unknown"
+    try:
+        reader = geoip2.database.Reader('GeoLite2-City.mmdb')  # 这里的路径需要指向你自己的数据库文件
+        response = reader.city(ip_address)
+        country = response.country.name
+        city = response.city.name
+        return f"{country}_{city}"
+        return f"{country}"
+    except geoip2.errors.AddressNotFoundError as e:
+        print(f"Error: {e}")
+        return "Unknown"
 
 # 处理sb，待办
 def process_sb(data, index):
@@ -343,39 +346,8 @@ print("聚合完成")
 
 # 你的主要处理代码
 
-def get_physical_location(server, db_path='/geoip/GeoLite2-City.mmdb'):
-    # 优先使用 ipinfo.io API
-    try:
-        response = requests.get(f"https://ipinfo.io/{server}/json")
-        response.raise_for_status()  # Raise an HTTPError for bad responses
-        data = response.json()
-        country = data.get("country", "Unknown Country")
-        if country != "Unknown Country":
-            return f"{country_code_to_flag(country)} {country}"
-        else:
-            return country
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error fetching location from ipinfo.io for server {server}: {e}")
-    
-    # 如果 API 请求失败，回退到 GeoLite2-City 数据库
-    try:
-        address = re.sub(':.*', '', server)  # 去掉端口
-        ip_address = socket.gethostbyname(address)
-        with geoip2.database.Reader(db_path) as reader:
-            response = reader.city(ip_address)
-            country = response.country.name
-            city = response.city.name
-            return f"{country}"  # 只返回国家
-    except geoip2.errors.AddressNotFoundError:
-        return "Unknown Country"
-    except FileNotFoundError:
-        logging.error(f"Error: GeoLite2-City database '{db_path}' not found.")
-        return "Database not found"
-    except Exception as e:
-        logging.error(f"Unexpected error: {e}")
-        return "Error"
-# 添加调试信息
-import os
+
+
 
 # 打印 ./sub 目录中的文件
 print("Files in ./sub directory:")
