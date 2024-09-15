@@ -26,6 +26,9 @@ jobs:
       - name: Run merged proxies script
         run: python merged_proxies.py
 
+      - name: Show merged_proxies.yaml content
+        run: cat ./sub/merged_proxies.yaml
+
       - name: Check for changes
         id: check_changes
         run: |
@@ -39,6 +42,12 @@ jobs:
             echo "No changes detected."
             exit 0
           fi
+
+      - name: Show git diff
+        run: git diff --cached
+
+      - name: Show git status
+        run: git status
 
       - name: Commit and push changes
         if: steps.check_changes.outputs.changes_detected == 'true'
