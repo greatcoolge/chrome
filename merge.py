@@ -42,7 +42,7 @@ def get_physical_location(url):
 
 
 
-def process_clash(data, index):
+def process_clash(data, index, location):
     # 解析YAML格式的内容
     content = yaml.safe_load(data)
 
@@ -140,7 +140,7 @@ def process_clash(data, index):
             ss_meta = f"ss://{ss_source}"
             merged_proxies.append(ss_meta)
 
-def process_naive(data, index):
+def process_naive(data, index, location):
     try:
         json_data = json.loads(data)
         proxy_str = json_data["proxy"]
@@ -149,7 +149,7 @@ def process_naive(data, index):
     except Exception as e:
         logging.error(f"Error processing naive data for index {index}: {e}")
 
-def process_sb(data, index):
+def process_sb(data, index, location):
     try:
         json_data = json.loads(data)
         server = json_data["outbounds"][1].get("server", "")
@@ -166,7 +166,7 @@ def process_sb(data, index):
     except Exception as e:
         logging.error(f"Error processing shadowtls data for index {index}: {e}")
 
-def process_hysteria(data, index):
+def process_hysteria(data, index, location):
     try:
         json_data = json.loads(data)
         server = json_data.get("server", "")
@@ -187,7 +187,7 @@ def process_hysteria(data, index):
     except Exception as e:
         logging.error(f"Error processing hysteria data for index {index}: {e}")
 
-def process_hysteria2(data, index):
+def process_hysteria2(data, index, location):
     try:
         json_data = json.loads(data)
         server = json_data.get("server", "")
@@ -204,7 +204,7 @@ def process_hysteria2(data, index):
         logging.error(f"Error processing hysteria2 data for index {index}: {e}")
 
 #处理xray
-def process_xray(data, index):
+def process_xray(data, index, location):
     try:
         json_data = json.loads(data)
         protocol = json_data["outbounds"][0].get("protocol", "")
