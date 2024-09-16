@@ -406,7 +406,7 @@ print("聚合完成")
 
 
 
-LATENCY_THRESHOLD = 1000  # 设置延迟阈值为 1000 毫秒（5 秒）
+LATENCY_THRESHOLD = 50  # 设置延迟阈值为 1000 毫秒（5 秒）
 
 # 使用 TCP 连接测试节点的可用性和延迟
 def tcp_connection_test(server, port, timeout=5):
