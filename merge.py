@@ -353,3 +353,4 @@ def main():
         print(f"Error processing URLs: {e}")
 
 if __name__ == '__main__':
+    main()
