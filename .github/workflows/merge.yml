@@ -21,13 +21,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-  #    - name: Run merge script
-  #      run: |
-  #        python merged_proxies.py
-  #        echo "Files in ./sub directory:"
-  #        ls -la ./sub
-  #        echo "Content of merged_proxies.yaml:"
-  #        cat ./sub/merged_proxies.yaml
+      - name: Run merge script
+        run: |
+          python merged_proxies.py
+          echo "Files in ./sub directory:"
+          ls -la ./sub
+          echo "Content of merged_proxies.yaml:"
+          cat ./sub/merged_proxies.yaml
 
       - name: Run shadowrocket merge script
         run: python merge.py
