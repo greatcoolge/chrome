@@ -23,21 +23,21 @@ def process_urls(url_file, processor):
                 logging.error(f"Error processing URL {url}: {e}")
     except Exception as e:
         logging.error(f"Error reading file {url_file}: {e}")
-def get_physical_location(address):
-    address = re.sub(':.*', '', address)  # 用正则表达式去除端口部分
-    try:
-        ip_address = socket.gethostbyname(address)
-    except socket.gaierror:
-        ip_address = address
+#def get_physical_location(address):
+#    address = re.sub(':.*', '', address)  # 用正则表达式去除端口部分
+#    try:
+#        ip_address = socket.gethostbyname(address)
+#    except socket.gaierror:
+#        ip_address = address
 
-    try:
-        reader = geoip2.database.Reader('GeoLite2-Country.mmdb')  # 指向你的 GeoLite2-Country.mmdb 数据库文件路径
-        response = reader.country(ip_address)  # 使用 country 方法获取国家信息
-        country = response.country.name  # 提取国家名称
-        return f"{country}"  # 返回国家名称
-    except geoip2.errors.AddressNotFoundError as e:
-        print(f"Error: {e}")
-        return "Unknown"
+#    try:
+#        reader = geoip2.database.Reader('GeoLite2-Country.mmdb')  # 指向你的 GeoLite2-Country.mmdb 数据库文件路径
+#        response = reader.country(ip_address)  # 使用 country 方法获取国家信息
+#        country = response.country.name  # 提取国家名称
+#        return f"{country}"  # 返回国家名称
+#    except geoip2.errors.AddressNotFoundError as e:
+#        print(f"Error: {e}")
+#        return "Unknown"
 
 
 def process_clash(data, index):
@@ -298,21 +298,51 @@ process_urls('./urls/xray_urls.txt', process_xray)
 # 将结果写入文件
 merged_content = "\n".join(merged_proxies)
 
+
+
+# 定义获取地理位置信息的函数
+def get_physical_location(address):
+    address = re.sub(':.*', '', address)  # 用正则表达式去除端口部分
+    try:
+        ip_address = socket.gethostbyname(address)
+    except socket.gaierror:
+        ip_address = address
+
+    try:
+        reader = geoip2.database.Reader('GeoLite2-Country.mmdb')  # 指向你的 GeoLite2-Country.mmdb 数据库文件路径
+        response = reader.country(ip_address)  # 使用 country 方法获取国家信息
+        country = response.country.name  # 提取国家名称
+        return f"{country}"  # 返回国家名称
+    except geoip2.errors.AddressNotFoundError as e:
+        print(f"Error: {e}")
+        return "Unknown"
+
+# 定义合并内容与地理位置信息的函数
+def merge_content_with_geo(data):
+    # 假设你有一个提取地址的函数 extract_address_from_data
+    address = extract_address_from_data(data)  # 提取地址信息
+    country = get_physical_location(address)   # 获取地理位置信息
+    return f"# Location: {country}\n{data}"  # 将地理位置信息放在内容头部
+
+# 提取地址的简单示例函数（你需要根据实际数据定义它）
+def extract_address_from_data(data):
+    # 假设代理地址在数据中，简单示例，实际需根据你的数据格式提取
+    return "example.com"
+
+# 示例处理流程
 try:
-    # 1. 获取或生成原始的 merged_content（代理配置信息）
     merged_content = "你的代理配置信息..."  # 这是原始配置信息
 
-    # 2. 获取地理位置信息并合并到 merged_content 中
-    merged_content_with_geo = merge_content_with_geo(merged_content)  # 将地理位置信息加到头部
+    # 先合并地理位置信息到 merged_content 中
+    merged_content_with_geo = merge_content_with_geo(merged_content)
 
-    # 3. 将合并后的内容进行 Base64 编码
+    # 将合并后的内容进行 Base64 编码
     encoded_content = base64.b64encode(merged_content_with_geo.encode("utf-8")).decode("utf-8")
 
-    # 4. 将编码后的内容写入文件 shadowrocket_base64.txt
+    # 写入文件 shadowrocket_base64.txt
     with open("./sub/shadowrocket_base64.txt", "w") as encoded_file:
         encoded_file.write(encoded_content)
-
+        
     print("Content with geographic location successfully encoded and written to shadowrocket_base64.txt.")
 except Exception as e:
     print(f"Error encoding and writing to file: {e}")
-
