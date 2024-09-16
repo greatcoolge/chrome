@@ -322,7 +322,7 @@ def main():
 
     try:
         # 处理不同类型的 URL 文件
-        all_results.extend(process_urls('./urls/clash_urls.txt', example_processor)
+        all_results.extend(process_urls('./urls/clash_urls.txt', example_processor))
         # 如果需要处理更多的 URL 文件，请取消注释并添加其他处理
         # all_results.extend(process_urls('./urls/clash_quick.txt', process_clash))
         # all_results.extend(process_urls('./urls/sb_urls.txt', process_sb))
