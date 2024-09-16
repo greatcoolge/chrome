@@ -295,10 +295,11 @@ def process_urls(url_file, processor):
                 response = urllib.request.urlopen(url)
                 data = response.read().decode('utf-8')
 
-              #  location = get_physical_location(url).strip()  # 去除前后空格和换行符
-              #  print(f"Processing URL {url} with location {location}")
-                print(f"Fetched data from {url}: {data[:100]}")
-                result = processor(data, index, location)
+                # 获取地理位置，如果不需要可以设置为 None
+                location = get_physical_location(url)  # 确保 get_physical_location 是有效的函数
+                print(f"Processing URL {url} with location {location}")
+
+                result = processor(data, index, location)  # 确保 processor 函数处理 location
                 if result is None:
                     result = ""  # 将 None 替换为空字符串
                 results.append(result)
@@ -308,6 +309,7 @@ def process_urls(url_file, processor):
         logging.error(f"Error reading file {url_file}: {e}")
     
     return results
+
 
 
 
