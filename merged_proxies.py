@@ -388,7 +388,7 @@ merged_proxies = []
 
 # 处理不同类型的节点
 process_urls('./urls/clash_quick.txt', process_clash)
-# process_urls('./urls/clash_urls.txt', process_clash)
+process_urls('./urls/clash_urls.txt', process_clash)
 # process_urls('./urls/hysteria_urls.txt', process_hysteria)
 process_urls('./urls/sb_urls.txt', process_sb)
 # process_urls('./urls/clashmeta.txt', process_clash)
@@ -404,7 +404,7 @@ print("聚合完成")
 
 
 # 设置延迟阈值 (以毫秒为单位)
-LATENCY_THRESHOLD = 1000
+LATENCY_THRESHOLD = 3000
 
 # 检测节点的可用性和延迟
 def check_clash_node(server, port):
