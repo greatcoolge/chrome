@@ -55,7 +55,7 @@ def get_physical_location(address):
     # 如果 API 请求失败，回退到 GeoLite2-City 数据库
     try:
         ip_address = socket.gethostbyname(address)
-        reader = geoip2.database.Reader('geoip/GeoLite2-City.mmdb')
+        reader = geoip2.database.Reader('GeoLite2-City.mmdb')
         response = reader.city(ip_address)
         country = response.country.name
         return country
