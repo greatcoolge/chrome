@@ -406,28 +406,37 @@ print("聚合完成")
 
 
 # 设置延迟阈值 (以毫秒为单位)
-LATENCY_THRESHOLD = 3000
+LATENCY_THRESHOLD = 5000
 
-# 检测节点的可用性和延迟
-def check_clash_node(server, port):
-    url = f"http://{server}:{port}"
+
+
+# 检测 Google 测试服务器的可用性和延迟
+def check_google_test_server(url):
     try:
         latencies = []
         for _ in range(3):  # 测试 3 次取平均
             start_time = time.time()
             response = requests.get(url, timeout=10)
             end_time = time.time()
-            latency = (end_time - start_time) * 1500
-            if response.status_code in (200, 204):  # 处理 200 和 204 响应代码
+            latency = (end_time - start_time) * 3000
+            if response.status_code == 204:
                 latencies.append(latency)
             else:
-                print(f"非200/204响应代码: {response.status_code}, 响应内容: {response.text}")
+                print(f"非204响应代码: {response.status_code}, 响应内容: {response.text}")
                 return False, None
         average_latency = sum(latencies) / len(latencies)
         return True, average_latency
     except requests.RequestException as e:
         print(f"请求失败: {e}")
         return False, None
+
+# 测试 Google 测试服务器
+url = "https://www.gstatic.com/generate_204"
+success, latency = check_google_test_server(url)
+if success:
+    print(f"Google 测试服务器 {url} 的平均延迟为 {latency:.2f}ms")
+else:
+    print(f"Google 测试服务器 {url} 不可用")
 
 
 # 检测节点可用性函数并移除不可用或延迟过高的节点
