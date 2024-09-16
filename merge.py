@@ -189,6 +189,12 @@ def process_hysteria(data, index, location):
 
 def process_hysteria2(data, index, location):
     try:
+        # 处理逻辑
+        return "处理结果"  # 替换为实际结果
+    except Exception as e:
+        logging.error(f"Error processing hysteria2 data for index {index}: {e}")
+        return ""  # 确保返回的是字符串
+        
         json_data = json.loads(data)
         server = json_data.get("server", "")
         password = json_data.get("password", "")
@@ -206,6 +212,11 @@ def process_hysteria2(data, index, location):
 #处理xray
 def process_xray(data, index, location):
     try:
+        # 处理逻辑
+        return "处理结果"  # 替换为实际结果
+    except Exception as e:
+        logging.error(f"Error processing xray data for index {index}: {e}")
+        return ""  # 确保返回的是字符串
         json_data = json.loads(data)
         protocol = json_data["outbounds"][0].get("protocol", "")
 
@@ -285,12 +296,12 @@ def process_urls(url_file, processor):
                 response = urllib.request.urlopen(url)
                 data = response.read().decode('utf-8')
 
-                # 获取 URL 的地理位置信息
                 location = get_physical_location(url)
                 print(f"Processing URL {url} with location {location}")
 
-                # 调用自定义的处理器函数
                 result = processor(data, index, location)
+                if result is None:
+                    result = ""  # 将 None 替换为空字符串
                 results.append(result)
             except Exception as e:
                 logging.error(f"Error processing URL {url}: {e}")
@@ -298,6 +309,7 @@ def process_urls(url_file, processor):
         logging.error(f"Error reading file {url_file}: {e}")
     
     return results
+
 
 # 处理器函数，生成合并内容并返回
 def example_processor(data, index, location):
@@ -320,7 +332,11 @@ def main():
     all_results.extend(process_urls('./urls/xray_urls.txt', process_xray))
 
     # 合并所有处理结果
-    merged_content = "\n".join(merged_proxies + all_results)
+    merged_proxies = [item for item in merged_proxies if item is not None]
+    all_results = [item for item in all_results if item is not None]
+    merged_content = "\n".join([str(item) for item in merged_proxies + all_results if item is not None])
+
+    
 
     # 编码内容
     try:
