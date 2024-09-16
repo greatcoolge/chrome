@@ -187,12 +187,6 @@ def process_hysteria(data, index):
 
 def process_hysteria2(data, index):
     try:
-        # 处理逻辑
-        return "处理结果"  # 替换为实际结果
-    except Exception as e:
-        logging.error(f"Error processing hysteria2 data for index {index}: {e}")
-        return ""  # 确保返回的是字符串
-        
         json_data = json.loads(data)
         server = json_data.get("server", "")
         password = json_data.get("password", "")
@@ -210,11 +204,6 @@ def process_hysteria2(data, index):
 #处理xray
 def process_xray(data, index):
     try:
-        # 处理逻辑
-        return "处理结果"  # 替换为实际结果
-    except Exception as e:
-        logging.error(f"Error processing xray data for index {index}: {e}")
-        return ""  # 确保返回的是字符串
         json_data = json.loads(data)
         protocol = json_data["outbounds"][0].get("protocol", "")
 
