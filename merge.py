@@ -300,49 +300,78 @@ merged_content = "\n".join(merged_proxies)
 
 
 
-# 定义获取地理位置信息的函数
+import urllib.request
+import logging
+import base64
+import re
+import socket
+import geoip2.database
+
+# 获取地理位置信息函数
 def get_physical_location(address):
-    address = re.sub(':.*', '', address)  # 用正则表达式去除端口部分
+    address = re.sub(':.*', '', address)
     try:
         ip_address = socket.gethostbyname(address)
     except socket.gaierror:
         ip_address = address
 
     try:
-        reader = geoip2.database.Reader('GeoLite2-Country.mmdb')  # 指向你的 GeoLite2-Country.mmdb 数据库文件路径
-        response = reader.country(ip_address)  # 使用 country 方法获取国家信息
-        country = response.country.name  # 提取国家名称
-        return f"{country}"  # 返回国家名称
+        reader = geoip2.database.Reader('GeoLite2-Country.mmdb')
+        response = reader.country(ip_address)
+        country = response.country.name
+        return country
     except geoip2.errors.AddressNotFoundError as e:
         print(f"Error: {e}")
         return "Unknown"
 
-# 定义合并内容与地理位置信息的函数
-def merge_content_with_geo(data):
-    # 假设你有一个提取地址的函数 extract_address_from_data
-    address = extract_address_from_data(data)  # 提取地址信息
-    country = get_physical_location(address)   # 获取地理位置信息
-    return f"# Location: {country}\n{data}"  # 将地理位置信息放在内容头部
+# 处理 URL 的函数
+def process_urls(url_file, processor):
+    results = []
+    try:
+        with open(url_file, 'r') as file:
+            urls = file.read().splitlines()
 
-# 提取地址的简单示例函数（你需要根据实际数据定义它）
-def extract_address_from_data(data):
-    # 假设代理地址在数据中，简单示例，实际需根据你的数据格式提取
-    return "example.com"
+        for index, url in enumerate(urls):
+            try:
+                response = urllib.request.urlopen(url)
+                data = response.read().decode('utf-8')
 
-# 示例处理流程
-try:
-    merged_content = "你的代理配置信息..."  # 这是原始配置信息
+                # 获取 URL 的地理位置信息
+                location = get_physical_location(url)
+                print(f"Processing URL {url} with location {location}")
 
-    # 先合并地理位置信息到 merged_content 中
-    merged_content_with_geo = merge_content_with_geo(merged_content)
+                # 调用自定义的处理器函数
+                result = processor(data, index, location)
+                results.append(result)
+            except Exception as e:
+                logging.error(f"Error processing URL {url}: {e}")
+    except Exception as e:
+        logging.error(f"Error reading file {url_file}: {e}")
+    
+    return "\n".join(results)
 
-    # 将合并后的内容进行 Base64 编码
-    encoded_content = base64.b64encode(merged_content_with_geo.encode("utf-8")).decode("utf-8")
+# 处理器函数，生成合并内容并返回
+def example_processor(data, index, location):
+    # 生成输出内容，将地理位置信息添加到头部
+    output_content = f"Location: {location}\n\n{data}\n"
+    return output_content
 
-    # 写入文件 shadowrocket_base64.txt
-    with open("./sub/shadowrocket_base64.txt", "w") as encoded_file:
-        encoded_file.write(encoded_content)
+# 主函数
+def main():
+    # 处理文件并获取所有结果
+    merged_content = process_urls('./urls/clash_urls.txt', example_processor)
+
+    # 编码内容
+    try:
+        encoded_content = base64.b64encode(merged_content.encode("utf-8")).decode("utf-8")
         
-    print("Content with geographic location successfully encoded and written to shadowrocket_base64.txt.")
-except Exception as e:
-    print(f"Error encoding and writing to file: {e}")
+        # 写入文件
+        with open("./sub/shadowrocket_base64.txt", "w") as encoded_file:
+            encoded_file.write(encoded_content)
+        
+        print("Content with geographic location successfully encoded and written to shadowrocket_base64.txt.")
+    except Exception as e:
+        print(f"Error encoding and writing to file: {e}")
+
+if __name__ == '__main__':
+    main()
