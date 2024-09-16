@@ -401,8 +401,33 @@ with open('./sub/merged_proxies.yaml', 'w', encoding='utf-8') as file:
 
 print("聚合完成")
 
+
+
 # 设置延迟阈值 (以毫秒为单位)
 LATENCY_THRESHOLD = 1000
+
+# 检测节点的可用性和延迟
+def check_clash_node(server, port):
+    """
+    检测节点的可用性和延迟。
+
+    :param server: 代理服务器地址
+    :param port: 代理服务器端口
+    :return: (可用性, 延迟) 元组
+    """
+    url = f"http://{server}:{port}"  # 根据实际情况构造 URL
+    try:
+        start_time = time.time()
+        response = requests.get(url, timeout=5)  # 5秒超时
+        end_time = time.time()
+        latency = (end_time - start_time) * 1000  # 转换为毫秒
+        if response.status_code == 200:
+            return True, latency
+        else:
+            return False, None
+    except requests.RequestException as e:
+        print(f"请求失败: {e}")
+        return False, None
 
 # 检测节点可用性函数并移除不可用或延迟过高的节点
 def check_proxies_availability(proxies):
@@ -414,7 +439,7 @@ def check_proxies_availability(proxies):
         name = proxy.get("name")
 
         if server and port:
-            is_available, latency = check_clash_node(server, port)  # 使用已有的检测函数
+            is_available, latency = check_clash_node(server, port)  # 使用检测函数
             if is_available:
                 if latency <= LATENCY_THRESHOLD:
                     print(f"节点 {index} ({name}): {server}:{port} 可用，延迟 {latency:.2f} ms")
@@ -428,7 +453,7 @@ def check_proxies_availability(proxies):
     
     return available_proxies
 
-# 加载生成的 merged_proxies.yaml 文件
+# 加载生成的 YAML 文件
 def load_yaml(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         return yaml.load(file, Loader=yaml.FullLoader)
@@ -451,8 +476,3 @@ if clash_config:
     print(f"已移除不可用或延迟过高的节点，更新后的代理已保存到 {output_file}")
 
 print("节点可用性检测及移除完成")
-
-
-
-
-
