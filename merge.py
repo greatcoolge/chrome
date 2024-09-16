@@ -295,7 +295,7 @@ def process_urls(url_file, processor):
                 response = urllib.request.urlopen(url)
                 data = response.read().decode('utf-8')
 
-                location = get_physical_location(url)
+                location = get_physical_location(url).strip()  # 去除前后空格和换行符
                 print(f"Processing URL {url} with location {location}")
 
                 result = processor(data, index, location)
@@ -308,6 +308,7 @@ def process_urls(url_file, processor):
         logging.error(f"Error reading file {url_file}: {e}")
     
     return results
+
 
 
 # 处理器函数，生成合并内容并返回
@@ -342,8 +343,9 @@ def main():
             encoded_content = base64.b64encode(merged_content.encode("utf-8")).decode("utf-8")
             
             # 写入文件
-            with open("./sub/shadowrocket_base64.txt", "w") as encoded_file:
+            with open("./sub/shadowrocket_base64.txt", "w", encoding="utf-8-sig") as encoded_file:
                 encoded_file.write(encoded_content)
+
             
             print("Content with geographic location successfully encoded and written to shadowrocket_base64.txt.")
         except Exception as e:
