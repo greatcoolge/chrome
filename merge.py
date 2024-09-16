@@ -7,8 +7,7 @@ import logging
 import geoip2.database
 import socket
 import re
-# 定义一个空列表用于存储合并后的代理配置
-merged_proxies = []
+
 # 提取节点
 def process_urls(url_file, processor):
     try:
@@ -283,78 +282,40 @@ def process_xray(data, index, location):
         logging.error(f"Error processing xray data for index {index}: {e}")
 
 
-# 处理 URL 的函数
-def process_urls(url_file, processor):
-    results = []
-    try:
-        with open(url_file, 'r') as file:
-            urls = file.read().splitlines()
+# 定义一个空列表用于存储合并后的代理配置
+merged_proxies = []
 
-        for index, url in enumerate(urls):
-            try:
-                response = urllib.request.urlopen(url)
-                data = response.read().decode('utf-8')
+        
+# 处理 clash URLs
+process_urls('./urls/clash_urls.txt', process_clash)
 
-                # 获取地理位置，如果不需要可以设置为 None
-                location = get_physical_location(url)  # 确保 get_physical_location 是有效的函数
-                print(f"Processing URL {url} with location {location}")
+# 处理 shadowtls URLs
+#process_urls('./urls/sb_urls.txt', process_sb)
 
-                result = processor(data, index, location)  # 确保 processor 函数处理 location
-                if result is None:
-                    result = ""  # 将 None 替换为空字符串
-                results.append(result)
-            except Exception as e:
-                logging.error(f"Error processing URL {url}: {e}")
-    except Exception as e:
-        logging.error(f"Error reading file {url_file}: {e}")
+# 处理 naive URLs
+#process_urls('./urls/naiverproxy_urls.txt', process_naive)
+
+# 处理 hysteria URLs
+#process_urls('./urls/hysteria_urls.txt', process_hysteria)
+
+# 处理 hysteria2 URLs
+process_urls('./urls/hysteria2_urls.txt', process_hysteria2)
+
+# 处理不同类型的节点
+process_urls('./urls/clash_quick.txt', process_clash)
+
+# 处理 xray URLs
+process_urls('./urls/xray_urls.txt', process_xray)
+
+# 将结果写入文件
+merged_content = "\n".join(merged_proxies)
+
+try:
+    encoded_content = base64.b64encode(merged_content.encode("utf-8")).decode("utf-8")
     
-    return results
-
-
-
-
-# 处理器函数，生成合并内容并返回
-def example_processor(data, index, location):
-    output_content = f"Location: {location}\n\n{data}\n"
-    return output_content
-
-# 主函数
-def main():
-    # 初始化 merged_proxies
-    merged_proxies = []
-    all_results = []
-    try:
-        # 处理不同类型的 URL 文件
-        all_results.extend(process_urls('./urls/clash_urls.txt', example_processor))
-        # 如果需要处理更多的 URL 文件，请取消注释并添加其他处理
-        # all_results.extend(process_urls('./urls/clash_quick.txt', process_clash))
-        # all_results.extend(process_urls('./urls/sb_urls.txt', process_sb))
-        # all_results.extend(process_urls('./urls/clashmeta.txt', process_clash))
-        all_results.extend(process_urls('./urls/hysteria2_urls.txt', process_hysteria2))
-        all_results.extend(process_urls('./urls/xray_urls.txt', process_xray))
-
-        # 处理结果，移除 None 类型的项目
-        merged_proxies = [item for item in merged_proxies if item is not None]
-        all_results = [item for item in all_results if item is not None]
-
-        # 合并所有处理结果
-        merged_content = "\n".join([str(item) for item in merged_proxies + all_results if item is not None])
-
-        # 编码内容
-        try:
-            encoded_content = base64.b64encode(merged_content.encode("utf-8")).decode("utf-8")
-            
-            # 写入文件
-            with open("./sub/shadowrocket_base64.txt", "w", encoding="utf-8-sig") as encoded_file:
-                encoded_file.write(encoded_content)
-
-            
-            print("Content with geographic location successfully encoded and written to shadowrocket_base64.txt.")
-        except Exception as e:
-            print(f"Error encoding and writing to file: {e}")
-
-    except Exception as e:
-        print(f"Error processing URLs: {e}")
-
-if __name__ == '__main__':
-    main()
+    with open("./sub/shadowrocket_base64.txt", "w") as encoded_file:
+        encoded_file.write(encoded_content)
+        
+    print("Content successfully encoded and written to shadowrocket_base64.txt.")
+except Exception as e:
+    print(f"Error encoding and writing to file: {e}")
