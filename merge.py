@@ -295,8 +295,8 @@ def process_urls(url_file, processor):
                 response = urllib.request.urlopen(url)
                 data = response.read().decode('utf-8')
 
-                location = get_physical_location(url).strip()  # 去除前后空格和换行符
-                print(f"Processing URL {url} with location {location}")
+              #  location = get_physical_location(url).strip()  # 去除前后空格和换行符
+              #  print(f"Processing URL {url} with location {location}")
 
                 result = processor(data, index, location)
                 if result is None:
