@@ -7,6 +7,8 @@ import logging
 import geoip2.database
 import socket
 import re
+# 定义一个空列表用于存储合并后的代理配置
+merged_proxies = []
 
 # 提取节点
 def process_urls(url_file, processor):
@@ -23,21 +25,21 @@ def process_urls(url_file, processor):
                 logging.error(f"Error processing URL {url}: {e}")
     except Exception as e:
         logging.error(f"Error reading file {url_file}: {e}")
-def get_physical_location(address):
-    address = re.sub(':.*', '', address)  # 用正则表达式去除端口部分
-    try:
-        ip_address = socket.gethostbyname(address)
-    except socket.gaierror:
-        ip_address = address
 
+def get_physical_location(url):
     try:
-        reader = geoip2.database.Reader('GeoLite2-Country.mmdb')  # 指向你的 GeoLite2-Country.mmdb 数据库文件路径
-        response = reader.country(ip_address)  # 使用 country 方法获取国家信息
-        country = response.country.name  # 提取国家名称
-        return f"{country}"  # 返回国家名称
-    except geoip2.errors.AddressNotFoundError as e:
-        print(f"Error: {e}")
+        hostname = urllib.parse.urlparse(url).hostname
+        if hostname:
+            ip_address = socket.gethostbyname(hostname)
+            reader = geoip2.database.Reader('GeoLite2-Country.mmdb')
+            response = reader.country(ip_address)
+            country = response.country.name
+            return country
         return "Unknown"
+    except Exception as e:
+        logging.error(f"Error getting physical location: {e}")
+        return "Unknown"
+
 
 
 def process_clash(data, index):
