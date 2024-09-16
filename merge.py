@@ -319,7 +319,7 @@ def example_processor(data, index, location):
 def main():
     # 初始化 merged_proxies
     merged_proxies = []
-
+    all_results = []
     try:
         # 处理不同类型的 URL 文件
         all_results.extend(process_urls('./urls/clash_urls.txt', example_processor))
