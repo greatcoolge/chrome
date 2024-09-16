@@ -409,6 +409,10 @@ print("聚合完成")
 LATENCY_THRESHOLD = 3000
 
 # 检测节点的可用性和延迟
+import requests
+import time
+
+# 检测节点的可用性和延迟
 def check_clash_node(server, port):
     url = f"http://{server}:{port}"
     try:
@@ -417,16 +421,18 @@ def check_clash_node(server, port):
             start_time = time.time()
             response = requests.get(url, timeout=10)
             end_time = time.time()
-            latency = (end_time - start_time) * 1500
-            if response.status_code == 300:
+            latency = (end_time - start_time) * 1000
+            if response.status_code == 200:
                 latencies.append(latency)
             else:
+                print(f"非200响应代码: {response.status_code}")
                 return False, None
         average_latency = sum(latencies) / len(latencies)
         return True, average_latency
     except requests.RequestException as e:
         print(f"请求失败: {e}")
         return False, None
+
 
 # 检测节点可用性函数并移除不可用或延迟过高的节点
 def check_proxies_availability(proxies):
