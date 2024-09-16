@@ -7,8 +7,6 @@ import logging
 import geoip2.database
 import socket
 import re
-# 定义一个空列表用于存储合并后的代理配置
-merged_proxies = []
 
 # 提取节点
 def process_urls(url_file, processor):
@@ -284,6 +282,7 @@ def process_xray(data, index, location):
         logging.error(f"Error processing xray data for index {index}: {e}")
 
 # 定义一个空列表用于存储合并后的代理配置
+merged_proxies = []
 # 处理 URL 的函数
 def process_urls(url_file, processor):
     results = []
@@ -343,6 +342,7 @@ def main():
         encoded_content = base64.b64encode(merged_content.encode("utf-8")).decode("utf-8")
         
         # 写入文件
+        merged_content = "\n".join(merged_proxies + all_results)
         with open("./sub/shadowrocket_base64.txt", "w") as encoded_file:
             encoded_file.write(encoded_content)
         
