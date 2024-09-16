@@ -1,4 +1,5 @@
 import yaml
+import time
 import requests
 import json
 import urllib.request
@@ -400,25 +401,58 @@ with open('./sub/merged_proxies.yaml', 'w', encoding='utf-8') as file:
 
 print("聚合完成")
 
-# 你的主要处理代码
+# 设置延迟阈值 (以毫秒为单位)
+LATENCY_THRESHOLD = 1000
+
+# 检测节点可用性函数并移除不可用或延迟过高的节点
+def check_proxies_availability(proxies):
+    available_proxies = []
+    
+    for index, proxy in enumerate(proxies, start=1):
+        server = proxy.get("server")
+        port = proxy.get("port")
+        name = proxy.get("name")
+
+        if server and port:
+            is_available, latency = check_clash_node(server, port)  # 使用已有的检测函数
+            if is_available:
+                if latency <= LATENCY_THRESHOLD:
+                    print(f"节点 {index} ({name}): {server}:{port} 可用，延迟 {latency:.2f} ms")
+                    available_proxies.append(proxy)  # 将可用且延迟合格的节点加入列表
+                else:
+                    print(f"节点 {index} ({name}): {server}:{port} 延迟过高 ({latency:.2f} ms)，移除")
+            else:
+                print(f"节点 {index} ({name}): {server}:{port} 不可用，移除")
+        else:
+            print(f"节点 {index} ({name}) 的信息不完整，跳过检查")
+    
+    return available_proxies
+
+# 加载生成的 merged_proxies.yaml 文件
+def load_yaml(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return yaml.load(file, Loader=yaml.FullLoader)
+
+# 保存更新后的代理列表到 YAML 文件
+def save_yaml(file_path, data):
+    with open(file_path, 'w', encoding='utf-8') as file:
+        yaml.dump({'proxies': data}, file, sort_keys=False, allow_unicode=True)
+
+# 处理代理文件
+output_file = './sub/merged_proxies.yaml'
+clash_config = load_yaml(output_file)
+
+if clash_config:
+    proxies = clash_config.get("proxies", [])
+    available_proxies = check_proxies_availability(proxies)  # 检测并获取可用节点
+
+    # 保存过滤后的代理列表到 YAML 文件
+    save_yaml(output_file, available_proxies)
+    print(f"已移除不可用或延迟过高的节点，更新后的代理已保存到 {output_file}")
+
+print("节点可用性检测及移除完成")
 
 
 
-
-# 打印 ./sub 目录中的文件
-print("Files in ./sub directory:")
-for root, dirs, files in os.walk('./sub'):
-    for file in files:
-        print(os.path.join(root, file))
-
-# 打印 merged_proxies.yaml 文件的内容
-print("\nContent of merged_proxies.yaml:")
-try:
-    with open('./sub/merged_proxies.yaml', 'r') as file:
-        print(file.read())
-except FileNotFoundError:
-    print("merged_proxies.yaml file not found.")
-except Exception as e:
-    print(f"Error reading file: {e}")
 
 
