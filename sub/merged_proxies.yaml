@@ -7124,25 +7124,6 @@ proxies:
     headers:
       Host:
       - singbox2.3196772.xyz
-- name: US vless 1
-  type: vless
-  server: 91.149.239.23
-  port: 12345
-  tls: true
-  client-fingerprint: chrome
-  servername: nijigen-works.jp
-  uuid: 37c5c02a-45ca-4c5c-a5c0-e8238571d11a
-  flow: ''
-  network: grpc
-  ws-opts:
-    path: ''
-    headers: {}
-  grpc-opts:
-    service-name: 23MKsu1m
-  reality-opts:
-    enabled: true
-    public-key: 5CbVsui_i_MD3uKpQPKm7a0Ch711dN5ZHV5tZap-HF8
-    short-id: d066b03b353640b8
 - name: US vmess 0
   type: vmess
   server: 104.21.238.65
