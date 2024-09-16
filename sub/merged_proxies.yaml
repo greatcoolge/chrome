@@ -7908,38 +7908,6 @@ proxies:
     enabled: true
     public-key: 5CbVsui_i_MD3uKpQPKm7a0Ch711dN5ZHV5tZap-HF8
     short-id: d066b03b353640b8
-- name: US hysteria2 0
-  type: hysteria2
-  server: 207.90.239.157
-  port: 3400
-  password: dongtaiwang.com
-  fast-open: true
-  sni: www.bing.com
-  skip-cert-verify: true
-- name: US hysteria2 1
-  type: hysteria2
-  server: 207.90.239.157
-  port: 3400
-  password: dongtaiwang.com
-  fast-open: true
-  sni: www.bing.com
-  skip-cert-verify: true
-- name: US hysteria2 2
-  type: hysteria2
-  server: 207.90.239.157
-  port: 3400
-  password: dongtaiwang.com
-  fast-open: true
-  sni: www.bing.com
-  skip-cert-verify: true
-- name: US hysteria2 3
-  type: hysteria2
-  server: 207.90.239.157
-  port: 3400
-  password: dongtaiwang.com
-  fast-open: true
-  sni: www.bing.com
-  skip-cert-verify: true
 - name: US vmess 0
   type: vmess
   server: 104.21.238.65
