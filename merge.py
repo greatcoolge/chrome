@@ -7,7 +7,8 @@ import logging
 import geoip2.database
 import socket
 import re
-
+# 定义一个空列表用于存储合并后的代理配置
+merged_proxies = []
 # 提取节点
 def process_urls(url_file, processor):
     try:
@@ -281,8 +282,7 @@ def process_xray(data, index, location):
     except Exception as e:
         logging.error(f"Error processing xray data for index {index}: {e}")
 
-# 定义一个空列表用于存储合并后的代理配置
-merged_proxies = []
+
 # 处理 URL 的函数
 def process_urls(url_file, processor):
     results = []
@@ -317,38 +317,39 @@ def example_processor(data, index, location):
 
 # 主函数
 def main():
-    # 处理文件并获取所有结果
-    all_results = []
-    
-    # 处理不同类型的 URL 文件
-    all_results.extend(process_urls('./urls/clash_urls.txt', example_processor))
-    # 如果需要处理更多的 URL 文件，请取消注释并添加其他处理
-    # all_results.extend(process_urls('./urls/clash_quick.txt', process_clash))
-    # all_results.extend(process_urls('./urls/sb_urls.txt', process_sb))
-    # all_results.extend(process_urls('./urls/clashmeta.txt', process_clash))
-    # all_results.extend(process_urls('./urls/hysteria_urls.txt', process_hysteria))
-    all_results.extend(process_urls('./urls/hysteria2_urls.txt', process_hysteria2))
-    all_results.extend(process_urls('./urls/xray_urls.txt', process_xray))
+    # 初始化 merged_proxies
+    merged_proxies = []
 
-    # 合并所有处理结果
-    merged_proxies = [item for item in merged_proxies if item is not None]
-    all_results = [item for item in all_results if item is not None]
-    merged_content = "\n".join([str(item) for item in merged_proxies + all_results if item is not None])
-
-    
-
-    # 编码内容
     try:
-        encoded_content = base64.b64encode(merged_content.encode("utf-8")).decode("utf-8")
-        
-        # 写入文件
-        merged_content = "\n".join(merged_proxies + all_results)
-        with open("./sub/shadowrocket_base64.txt", "w") as encoded_file:
-            encoded_file.write(encoded_content)
-        
-        print("Content with geographic location successfully encoded and written to shadowrocket_base64.txt.")
+        # 处理不同类型的 URL 文件
+        all_results.extend(process_urls('./urls/clash_urls.txt', example_processor)
+        # 如果需要处理更多的 URL 文件，请取消注释并添加其他处理
+        # all_results.extend(process_urls('./urls/clash_quick.txt', process_clash))
+        # all_results.extend(process_urls('./urls/sb_urls.txt', process_sb))
+        # all_results.extend(process_urls('./urls/clashmeta.txt', process_clash))
+        all_results.extend(process_urls('./urls/hysteria2_urls.txt', process_hysteria2))
+        all_results.extend(process_urls('./urls/xray_urls.txt', process_xray))
+
+        # 处理结果，移除 None 类型的项目
+        merged_proxies = [item for item in merged_proxies if item is not None]
+        all_results = [item for item in all_results if item is not None]
+
+        # 合并所有处理结果
+        merged_content = "\n".join([str(item) for item in merged_proxies + all_results if item is not None])
+
+        # 编码内容
+        try:
+            encoded_content = base64.b64encode(merged_content.encode("utf-8")).decode("utf-8")
+            
+            # 写入文件
+            with open("./sub/shadowrocket_base64.txt", "w") as encoded_file:
+                encoded_file.write(encoded_content)
+            
+            print("Content with geographic location successfully encoded and written to shadowrocket_base64.txt.")
+        except Exception as e:
+            print(f"Error encoding and writing to file: {e}")
+
     except Exception as e:
-        print(f"Error encoding and writing to file: {e}")
+        print(f"Error processing URLs: {e}")
 
 if __name__ == '__main__':
-    main()
