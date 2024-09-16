@@ -406,51 +406,65 @@ print("聚合完成")
 
 
 
+LATENCY_THRESHOLD = 1000  # 设置延迟阈值为 1000 毫秒（5 秒）
 
-
-
-LATENCY_THRESHOLD = 5000  # 设置延迟阈值为 5000 毫秒（5 秒）
-
-# 检测测试服务器的可用性和延迟
-def check_test_server(url):
+# 使用 TCP 连接测试节点的可用性和延迟
+def tcp_connection_test(server, port, timeout=5):
     try:
         latencies = []
         for _ in range(3):  # 测试 3 次取平均
+            # 创建一个 TCP socket
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(timeout)
+
+            # 记录连接开始时间
             start_time = time.time()
-            response = requests.get(url, timeout=10)
+
+            # 尝试连接服务器
+            result = sock.connect_ex((server, port))
+
+            # 记录连接结束时间
             end_time = time.time()
-            latency = (end_time - start_time) * 1000  # 转换为毫秒
-            if response.status_code in (200, 204):
+
+            # 计算延迟（毫秒）
+            latency = (end_time - start_time) * 1000
+
+            # 检查连接是否成功（返回值 0 表示成功）
+            if result == 0:
                 latencies.append(latency)
             else:
-                print(f"非200/204响应代码: {response.status_code}, 响应内容: {response.text}")
-                return False, None
-        average_latency = sum(latencies) / len(latencies)
-        return True, average_latency
-    except requests.RequestException as e:
-        print(f"请求失败: {e}")
+                print(f"{server}:{port} 不可用")
+
+            sock.close()
+
+        if latencies:
+            average_latency = sum(latencies) / len(latencies)
+            return True, average_latency
+        else:
+            return False, None
+    except Exception as e:
+        print(f"TCP 连接测试失败: {e}")
         return False, None
 
-# 检测代理的延迟并移除延迟过高的节点
-def check_proxies_availability(proxies, test_url):
-    # 检测测试服务器的延迟
-    test_success, test_latency = check_test_server(test_url)
-    if not test_success:
-        print(f"测试服务器 {test_url} 不可用")
-        return []
-
+# 检测代理的可用性和延迟
+def check_proxies_availability(proxies):
     available_proxies = []
 
     for index, proxy in enumerate(proxies, start=1):
-        # 在这里我们不再调用 check_clash_node，而是仅根据测试服务器的结果决定是否移除节点
-        # 由于不再检查节点的延迟，所以所有节点都将根据测试服务器的结果保留或移除
-        
-        if test_latency <= LATENCY_THRESHOLD:
-            print(f"节点 {index} ({proxy.get('name')}): {proxy.get('server')}:{proxy.get('port')} 可用，延迟 {test_latency:.2f} ms")
-            available_proxies.append(proxy)
+        server = proxy.get("server")
+        port = proxy.get("port")
+        name = proxy.get("name")
+
+        if server and port:
+            is_available, latency = tcp_connection_test(server, int(port))
+            if is_available and latency <= LATENCY_THRESHOLD:
+                print(f"节点 {index} ({name}): {server}:{port} 可用，延迟 {latency:.2f} ms")
+                available_proxies.append(proxy)
+            else:
+                print(f"节点 {index} ({name}): {server}:{port} 延迟过高或不可用，移除")
         else:
-            print(f"节点 {index} ({proxy.get('name')}): {proxy.get('server')}:{proxy.get('port')} 测试服务器延迟过高 ({test_latency:.2f} ms)，移除")
-    
+            print(f"节点 {index} ({name}) 的信息不完整，跳过检查")
+
     return available_proxies
 
 # 加载生成的 YAML 文件
@@ -465,18 +479,16 @@ def save_yaml(file_path, data):
 
 # 处理代理文件
 output_file = './sub/merged_proxies.yaml'
-test_url = "https://www.gstatic.com/generate_204"  # 您可以更改为其他测试链接
 clash_config = load_yaml(output_file)
 
 if clash_config:
     proxies = clash_config.get("proxies", [])
-    available_proxies = check_proxies_availability(proxies, test_url)
+    available_proxies = check_proxies_availability(proxies)
 
     # 保存过滤后的代理列表到 YAML 文件
     save_yaml(output_file, available_proxies)
     print(f"已移除不可用或延迟过高的节点，更新后的代理已保存到 {output_file}")
 
 print("节点可用性检测及移除完成")
-
 
 
