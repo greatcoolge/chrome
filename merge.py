@@ -299,11 +299,20 @@ process_urls('./urls/xray_urls.txt', process_xray)
 merged_content = "\n".join(merged_proxies)
 
 try:
-    encoded_content = base64.b64encode(merged_content.encode("utf-8")).decode("utf-8")
-    
+    # 1. 获取或生成原始的 merged_content（代理配置信息）
+    merged_content = "你的代理配置信息..."  # 这是原始配置信息
+
+    # 2. 获取地理位置信息并合并到 merged_content 中
+    merged_content_with_geo = merge_content_with_geo(merged_content)  # 将地理位置信息加到头部
+
+    # 3. 将合并后的内容进行 Base64 编码
+    encoded_content = base64.b64encode(merged_content_with_geo.encode("utf-8")).decode("utf-8")
+
+    # 4. 将编码后的内容写入文件 shadowrocket_base64.txt
     with open("./sub/shadowrocket_base64.txt", "w") as encoded_file:
         encoded_file.write(encoded_content)
-        
-    print("Content successfully encoded and written to shadowrocket_base64.txt.")
+
+    print("Content with geographic location successfully encoded and written to shadowrocket_base64.txt.")
 except Exception as e:
     print(f"Error encoding and writing to file: {e}")
+
