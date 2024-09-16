@@ -403,28 +403,27 @@ print("聚合完成")
 
 
 
+
+
 # 设置延迟阈值 (以毫秒为单位)
 LATENCY_THRESHOLD = 3000
 
 # 检测节点的可用性和延迟
 def check_clash_node(server, port):
-    """
-    检测节点的可用性和延迟。
-
-    :param server: 代理服务器地址
-    :param port: 代理服务器端口
-    :return: (可用性, 延迟) 元组
-    """
-    url = f"http://{server}:{port}"  # 根据实际情况构造 URL
+    url = f"http://{server}:{port}"
     try:
-        start_time = time.time()
-        response = requests.get(url, timeout=5)  # 5秒超时
-        end_time = time.time()
-        latency = (end_time - start_time) * 1000  # 转换为毫秒
-        if response.status_code == 200:
-            return True, latency
-        else:
-            return False, None
+        latencies = []
+        for _ in range(3):  # 测试 3 次取平均
+            start_time = time.time()
+            response = requests.get(url, timeout=10)
+            end_time = time.time()
+            latency = (end_time - start_time) * 1500
+            if response.status_code == 300:
+                latencies.append(latency)
+            else:
+                return False, None
+        average_latency = sum(latencies) / len(latencies)
+        return True, average_latency
     except requests.RequestException as e:
         print(f"请求失败: {e}")
         return False, None
@@ -439,11 +438,11 @@ def check_proxies_availability(proxies):
         name = proxy.get("name")
 
         if server and port:
-            is_available, latency = check_clash_node(server, port)  # 使用检测函数
+            is_available, latency = check_clash_node(server, port)
             if is_available:
                 if latency <= LATENCY_THRESHOLD:
                     print(f"节点 {index} ({name}): {server}:{port} 可用，延迟 {latency:.2f} ms")
-                    available_proxies.append(proxy)  # 将可用且延迟合格的节点加入列表
+                    available_proxies.append(proxy)
                 else:
                     print(f"节点 {index} ({name}): {server}:{port} 延迟过高 ({latency:.2f} ms)，移除")
             else:
@@ -469,10 +468,11 @@ clash_config = load_yaml(output_file)
 
 if clash_config:
     proxies = clash_config.get("proxies", [])
-    available_proxies = check_proxies_availability(proxies)  # 检测并获取可用节点
+    available_proxies = check_proxies_availability(proxies)
 
     # 保存过滤后的代理列表到 YAML 文件
     save_yaml(output_file, available_proxies)
     print(f"已移除不可用或延迟过高的节点，更新后的代理已保存到 {output_file}")
 
 print("节点可用性检测及移除完成")
+
