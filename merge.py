@@ -297,7 +297,7 @@ def process_urls(url_file, processor):
 
               #  location = get_physical_location(url).strip()  # 去除前后空格和换行符
               #  print(f"Processing URL {url} with location {location}")
-
+                print(f"Fetched data from {url}: {data[:100]}")
                 result = processor(data, index, location)
                 if result is None:
                     result = ""  # 将 None 替换为空字符串
