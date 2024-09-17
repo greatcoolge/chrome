@@ -11,8 +11,11 @@ SUBSCRIPTION_URLS = [  # 支持多个订阅链接
     
     # 可以继续添加更多的订阅链接
 ]
-OUTPUT_DIR = "sub"  # 输出文件夹
-OUTPUT_FILE = os.path.join(OUTPUT_DIR, "available_proxies.yaml")  # 输出文件
+OUTPUT_DIR = "sub"
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, "available_proxies.yaml")  # 输出文件路径
+
+# 确保输出目录存在
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # 使用 TCP 连接测试节点的可用性和延迟
 def tcp_connection_test(server, port, timeout=5):
@@ -91,11 +94,21 @@ def fetch_proxies_from_subscription(subscription_url):
 # 将可用的代理节点保存到文件
 def save_available_proxies(proxies, output_file):
     try:
-        # 创建 output_dir 文件夹（如果不存在）
-        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        # 检查输出目录是否存在
+        if not os.path.exists(os.path.dirname(output_file)):
+            print(f"输出目录不存在: {os.path.dirname(output_file)}")
+            return
+
+        # 保存到文件
         with open(output_file, 'w', encoding='utf-8') as f:
             yaml.dump({"proxies": proxies}, f, allow_unicode=True)
         print(f"可用代理已保存到 {output_file}")
+
+        # 验证文件是否创建成功
+        if os.path.exists(output_file):
+            print(f"文件创建成功: {output_file}")
+        else:
+            print(f"文件创建失败: {output_file}")
     except Exception as e:
         print(f"保存代理到文件失败: {e}")
 
