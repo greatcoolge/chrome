@@ -1,0 +1,36 @@
+name: TCP Proxy Test
+
+on:
+  push:
+    branches:
+      - main  # 每次推送到 main 分支时触发
+  schedule:
+    - cron: '0 0 * * *'  # 每天 UTC 时间 0 点自动触发
+
+jobs:
+  tcp-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'  # 使用 Python 版本
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyyaml requests
+
+    - name: Run TCP Test Script
+      run: |
+        python your_script_name.py  # 替换为你保存脚本的名字
+
+    - name: Upload available proxies
+      uses: actions/upload-artifact@v3
+      with:
+        name: available-proxies
+        path: available_proxies.yaml  # 将生成的文件作为 artifact 上传
