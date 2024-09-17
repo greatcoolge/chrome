@@ -35,11 +35,11 @@ jobs:
 
     - name: Verify available proxies file
       run: |
-        if [ -f sub/available_proxies.yaml ]; then
+        if [ -f test/available_proxies.yaml ]; then
           echo "File exists, displaying contents:"
-          cat sub/available_proxies.yaml  # 打印文件内容以确认生成的内容
+          cat test/available_proxies.yaml  # 打印文件内容以确认生成的内容
         else
-          echo "File sub/available_proxies.yaml does not exist."
+          echo "File test/available_proxies.yaml does not exist."
           exit 1  # 文件不存在则失败
         fi
 
@@ -47,4 +47,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: available-proxies
-        path: sub/available_proxies.yaml  # 将生成的文件作为 artifact 上传
+        path: test/available_proxies.yaml  # 将生成的文件作为 artifact 上传
