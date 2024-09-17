@@ -39,6 +39,7 @@ jobs:
             git config core.ignorecase false
             git config --local user.email "actions@github.com"
             git config --local user.name "GitHub Action"
+            git pull --rebase origin main
             git add .
             git commit -m "Updated at $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M %Z')"
 
