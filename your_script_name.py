@@ -9,7 +9,7 @@ SUBSCRIPTION_URLS = [
     "https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/snippets/nodes.yml",
     # 可以继续添加更多的订阅链接
 ]
-OUTPUT_DIR = "sub"
+OUTPUT_DIR = "test"
 OUTPUT_FILE = os.path.join(OUTPUT_DIR, "available_proxies.yaml")
 LOCAL_SUBSCRIPTION_FILE = os.path.join(OUTPUT_DIR, "nodes.yml")  # 下载到本地的文件路径
 
