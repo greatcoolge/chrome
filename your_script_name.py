@@ -94,21 +94,15 @@ def fetch_proxies_from_subscription(subscription_url):
 # 将可用的代理节点保存到文件
 def save_available_proxies(proxies, output_file):
     try:
-        # 检查输出目录是否存在
-        if not os.path.exists(os.path.dirname(output_file)):
-            print(f"输出目录不存在: {os.path.dirname(output_file)}")
-            return
-
-        # 保存到文件
         with open(output_file, 'w', encoding='utf-8') as f:
             yaml.dump({"proxies": proxies}, f, allow_unicode=True)
         print(f"可用代理已保存到 {output_file}")
-
-        # 验证文件是否创建成功
+        
+        # 检查文件是否成功创建
         if os.path.exists(output_file):
-            print(f"文件创建成功: {output_file}")
+            print(f"文件 {output_file} 已成功创建")
         else:
-            print(f"文件创建失败: {output_file}")
+            print(f"文件 {output_file} 未创建")
     except Exception as e:
         print(f"保存代理到文件失败: {e}")
 
@@ -128,6 +122,9 @@ def main():
         print(f"共找到 {len(all_proxies)} 个代理节点，开始测试...")
         available_proxies = check_proxies_availability(all_proxies)
 
+        # 打印可用代理的数量
+        print(f"共找到 {len(available_proxies)} 个可用代理")
+        
         # 保存可用的代理到文件
         save_available_proxies(available_proxies, OUTPUT_FILE)
     else:
