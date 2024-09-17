@@ -14,7 +14,16 @@ OUTPUT_FILE = os.path.join(OUTPUT_DIR, "available_proxies.yaml")
 LOCAL_SUBSCRIPTION_FILE = os.path.join(OUTPUT_DIR, "nodes.yml")  # 下载到本地的文件路径
 
 # 确保输出目录存在
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+if not os.path.exists(OUTPUT_DIR):
+    os.makedirs(OUTPUT_DIR)
+    print(f"目录 {OUTPUT_DIR} 已创建")
+else:
+    print(f"目录 {OUTPUT_DIR} 已存在")
+
+# 其余脚本保持不变
+
+
+
 
 # 使用 TCP 连接测试节点的可用性和延迟
 def tcp_connection_test(server, port, timeout=5):
