@@ -1,4 +1,3 @@
-import base64
 import requests
 import socket
 import time
@@ -8,7 +7,7 @@ import yaml
 LATENCY_THRESHOLD = 6  # 设置为 6 毫秒，可以根据需要调整
 SUBSCRIPTION_URLS = [  # 支持多个订阅链接
     "https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/snippets/nodes.yml",
-    "",
+    
     # 可以继续添加更多的订阅链接
 ]
 OUTPUT_FILE = "available_proxies.yaml"  # 输出文件
@@ -77,10 +76,8 @@ def fetch_proxies_from_subscription(subscription_url):
     try:
         response = requests.get(subscription_url)
         if response.status_code == 200:
-            # 订阅内容是 Base64 编码的，需要解码
-            decoded_data = base64.b64decode(response.content).decode("utf-8")
             # 解析 YAML 格式的代理配置
-            proxies_config = yaml.safe_load(decoded_data)
+            proxies_config = yaml.safe_load(response.text)
             return proxies_config.get("proxies", [])
         else:
             print(f"无法获取订阅链接: {response.status_code}")
@@ -103,9 +100,12 @@ def main():
 
     # 从多个订阅中获取代理节点
     for url in SUBSCRIPTION_URLS:
-        print(f"正在从 {url} 获取代理节点...")
-        proxies = fetch_proxies_from_subscription(url)
-        all_proxies.extend(proxies)
+        if url:  # 确保 URL 不为空
+            print(f"正在从 {url} 获取代理节点...")
+            proxies = fetch_proxies_from_subscription(url)
+            all_proxies.extend(proxies)
+        else:
+            print("订阅链接为空，跳过...")
 
     if all_proxies:
         print(f"共找到 {len(all_proxies)} 个代理节点，开始测试...")
