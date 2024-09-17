@@ -1,5 +1,5 @@
 import base64
-import json 
+import json
 import urllib.request
 import yaml
 import codecs
@@ -23,21 +23,23 @@ def process_urls(url_file, processor):
                 logging.error(f"Error processing URL {url}: {e}")
     except Exception as e:
         logging.error(f"Error reading file {url_file}: {e}")
-
-def get_physical_location(url):
+def get_physical_location(address):
+    address = re.sub(':.*', '', address)  # 用正则表达式去除端口部分
     try:
-        hostname = urllib.parse.urlparse(url).hostname
-        if hostname:
-            ip_address = socket.gethostbyname(hostname)
-            reader = geoip2.database.Reader('GeoLite2-Country.mmdb')
-            response = reader.country(ip_address)
-            country = response.country.name
-            return country
-        return "Unknown"
-    except Exception as e:
-        logging.error(f"Error getting physical location: {e}")
-        return "Unknown"
+        ip_address = socket.gethostbyname(address)
+    except socket.gaierror:
+        ip_address = address
 
+    try:
+        reader = geoip2.database.Reader('GeoLite2-City.mmdb')  # 这里的路径需要指向你自己的数据库文件
+        response = reader.city(ip_address)
+        country = response.country.name
+        city = response.city.name
+        #return f"{country}_{city}"
+        return f"{country}"
+    except geoip2.errors.AddressNotFoundError as e:
+        print(f"Error: {e}")
+        return "Unknown"
 
 
 def process_clash(data, index):
@@ -147,7 +149,7 @@ def process_naive(data, index):
     except Exception as e:
         logging.error(f"Error processing naive data for index {index}: {e}")
 
-def process_sb(data, index, location):
+def process_sb(data, index):
     try:
         json_data = json.loads(data)
         server = json_data["outbounds"][1].get("server", "")
@@ -269,7 +271,6 @@ def process_xray(data, index):
             merged_proxies.append(xray_proxy)
     except Exception as e:
         logging.error(f"Error processing xray data for index {index}: {e}")
-
 
 # 定义一个空列表用于存储合并后的代理配置
 merged_proxies = []
