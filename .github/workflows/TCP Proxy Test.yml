@@ -33,6 +33,11 @@ jobs:
       run: |
         python your_script_name.py  # 替换为你保存脚本的名字
 
+    - name: Verify available proxies file
+      run: |
+        ls -l sub/available_proxies.yaml  # 确认文件是否存在
+        cat sub/available_proxies.yaml  # 打印文件内容以确认生成的内容
+
     - name: Upload available proxies
       uses: actions/upload-artifact@v3
       with:
