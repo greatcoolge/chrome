@@ -402,7 +402,7 @@ with open('./sub/merged_proxies.yaml', 'w', encoding='utf-8') as file:
 print("聚合完成")
 
 
-LATENCY_THRESHOLD =10  # 设置延迟阈值为 1000 毫秒（5 秒）
+LATENCY_THRESHOLD = 6  # 设置延迟阈值为 1000 毫秒（5 秒）
 
 # 使用 TCP 连接测试节点的可用性和延迟
 def tcp_connection_test(server, port, timeout=5):
