@@ -20,26 +20,24 @@ if not os.path.exists(OUTPUT_DIR):
 else:
     print(f"目录 {OUTPUT_DIR} 已存在")
 
-# 其余脚本保持不变
-
-
-
-
 # 使用 TCP 连接测试节点的可用性和延迟
 def tcp_connection_test(server, port, timeout=5):
     try:
         latencies = []
         for _ in range(3):  # 测试 3 次取平均值
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(timeout)
-            start_time = time.time()
-            result = sock.connect_ex((server, port))
-            end_time = time.time()
-            latency = (end_time - start_time) * 1000
+            try:
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.settimeout(timeout)
+                start_time = time.time()
+                result = sock.connect_ex((server, port))
+                end_time = time.time()
+                latency = (end_time - start_time) * 1000
 
-            if result == 0:  # 0 表示连接成功
-                latencies.append(latency)
-            sock.close()
+                if result == 0:  # 0 表示连接成功
+                    latencies.append(latency)
+                sock.close()
+            except Exception as e:
+                print(f"连接异常: {e}")
 
         if latencies:
             average_latency = sum(latencies) / len(latencies)
