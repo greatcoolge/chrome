@@ -1,50 +1,29 @@
 name: Test File Download
 
 on:
-  schedule:
-    - cron: '0 0,6,12,18 * * *'  # 每6小时执行一次
-  workflow_dispatch:  # 手动触发事件
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # 允许手动触发工作流
 
 jobs:
-  merge:
+  download-test-file:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.11  
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
 
-      - name: Run shadowrocket merge script
-        run: python test_download.py
-      
-      - name: Commit Changes
-        run: |
-          if [[ -n "$(git status --porcelain)" ]]; then
-            echo "Changes detected in the repository."
-            git config core.ignorecase false
-            git config --local user.email "actions@github.com"
-            git config --local user.name "GitHub Action"
-      
-            # Stage any local changes before pulling
-            git add .
-      
-            # Commit staged changes before pulling
-            git commit -m "Staging local changes before pulling."
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
 
-          # Pull the latest changes with rebase before pushing
-            git pull --rebase origin main
-      
-          # If there are still changes after pull, commit them
-            if [[ -n "$(git status --porcelain)" ]]; then
-              git add .
-              git commit -m "Updated at $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M %Z')"
-            fi
-      
-            git push
-          else
-            echo "No changes detected in the repository."
-          fi
+    - name: Run file download test script
+      run: |
+        python test_download.py
