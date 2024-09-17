@@ -8,6 +8,9 @@ on:
     - cron: '0 0 * * *'  # 每天 UTC 时间 0 点自动触发
   workflow_dispatch:  # 触发手动事件
 
+permissions:
+  contents: write  # 允许工作流推送更改
+
 jobs:
   tcp-test:
     runs-on: ubuntu-latest
