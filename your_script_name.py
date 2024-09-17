@@ -66,6 +66,7 @@ def fetch_proxies_from_local_file(file_path):
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             proxies_config = yaml.safe_load(f)
+            print(f"成功解析本地订阅文件: {file_path}")
             return proxies_config.get("proxies", [])
     except Exception as e:
         print(f"读取本地订阅文件失败: {e}")
@@ -74,11 +75,12 @@ def fetch_proxies_from_local_file(file_path):
 # 下载订阅文件到本地
 def download_subscription_to_local(subscription_url, local_file_path):
     try:
+        print(f"正在下载订阅文件: {subscription_url}")
         response = requests.get(subscription_url)
         if response.status_code == 200:
             with open(local_file_path, 'w', encoding='utf-8') as f:
                 f.write(response.text)
-            print(f"订阅文件已下载到 {local_file_path}")
+            print(f"订阅文件已成功下载到 {local_file_path}")
         else:
             print(f"无法下载订阅文件: {response.status_code}")
     except Exception as e:
@@ -105,6 +107,13 @@ def main():
             download_subscription_to_local(url, LOCAL_SUBSCRIPTION_FILE)
         else:
             print("订阅链接为空，跳过...")
+
+    # 检查是否成功下载到本地文件
+    if os.path.exists(LOCAL_SUBSCRIPTION_FILE):
+        print(f"本地订阅文件存在: {LOCAL_SUBSCRIPTION_FILE}")
+    else:
+        print(f"本地订阅文件不存在: {LOCAL_SUBSCRIPTION_FILE}")
+        return
 
     # 从本地文件中读取代理节点
     proxies = fetch_proxies_from_local_file(LOCAL_SUBSCRIPTION_FILE)
