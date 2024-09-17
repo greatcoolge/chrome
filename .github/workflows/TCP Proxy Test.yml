@@ -6,6 +6,7 @@ on:
       - main  # 每次推送到 main 分支时触发
   schedule:
     - cron: '0 0 * * *'  # 每天 UTC 时间 0 点自动触发
+  workflow_dispatch:  # 触发手动事件
 
 jobs:
   tcp-test:
