@@ -2,6 +2,7 @@ import requests
 import socket
 import time
 import yaml
+import os
 
 # 延迟阈值（毫秒）
 LATENCY_THRESHOLD = 6  # 设置为 6 毫秒，可以根据需要调整
@@ -91,7 +92,7 @@ def save_available_proxies(proxies, output_file):
     try:
         with open(output_file, 'w', encoding='utf-8') as f:
             yaml.dump({"proxies": proxies}, f, allow_unicode=True)
-        print(f"可用代理已保存到 {output_file}")
+        print(f"可用代理已保存到 {os.path.abspath(output_file)}")
     except Exception as e:
         print(f"保存代理到文件失败: {e}")
 
@@ -112,7 +113,10 @@ def main():
         available_proxies = check_proxies_availability(all_proxies)
 
         # 保存可用的代理到文件
-        save_available_proxies(available_proxies, OUTPUT_FILE)
+        if available_proxies:
+            save_available_proxies(available_proxies, OUTPUT_FILE)
+        else:
+            print("没有找到可用的代理节点。")
     else:
         print("没有找到代理节点，或解析失败。")
 
