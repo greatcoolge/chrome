@@ -1,0 +1,31 @@
+name: Generate File URL
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-url:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Generate file URL
+        id: generate_url
+        run: |
+          REPO_URL="https://github.com/${{ github.repository }}"
+          BRANCH="${{ github.ref }}"
+          FILE_PATH="sub/merged_proxies.yaml"
+
+          # Construct the browsable file URL
+          FILE_URL="${REPO_URL}/blob/${BRANCH#refs/heads/}/${FILE_PATH}"
+
+          echo "The file URL is: $FILE_URL"
+
+          # Save the file URL to the workflow environment
+          echo "file_url=$FILE_URL" >> $GITHUB_ENV
+
+      - name: Display file URL
+        run: echo "The file URL is:${{ env.file_url }}"
