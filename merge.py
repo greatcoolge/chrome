@@ -365,23 +365,51 @@ process_urls('./urls/xray_urls.txt', process_xray)
 # 将结果写入文件
 merged_content = "\n".join(merged_proxies)
 
-try:
-    # 检查内容是否已经是 Base64 编码的
-    try:
-        decoded_content = base64.urlsafe_b64decode(merged_content.encode("utf-8")).decode("utf-8")
-        print("Content was already encoded, skipping re-encoding.")
-        encoded_content = merged_content  # 如果已经编码过，就不需要再编码
-    except (UnicodeDecodeError, binascii.Error):
-        # 如果解码失败，说明内容未被编码，进行编码
-        encoded_content = base64.urlsafe_b64encode(merged_content.encode("utf-8")).decode("utf-8")
-        print("Content successfully encoded.")
 
-    # 将 Base64 URL 编码的内容写入文件
-    with open("./sub/shadowrocket_base64.txt", "w") as encoded_file:
-        encoded_file.write(encoded_content)
+
+def encode_content(content: str) -> str:
+    """
+    对内容进行 URL 安全的 Base64 编码。
+    如果内容已经编码过，则跳过编码过程。
+    """
+    try:
+        # 检查内容是否已经是 Base64 编码的
+        try:
+            # 尝试解码以检查是否已经编码
+            base64.urlsafe_b64decode(content.encode("utf-8")).decode("utf-8")
+            print("Content was already encoded, skipping re-encoding.")
+            encoded_content = content  # 如果已经编码过，就不需要再编码
+        except (UnicodeDecodeError, binascii.Error):
+            # 如果解码失败，说明内容未被编码，进行编码
+            encoded_content = base64.urlsafe_b64encode(content.encode("utf-8")).decode("utf-8")
+            print("Content successfully encoded.")
         
-    print("Content successfully written to shadowrocket_base64.txt.")
-except (UnicodeDecodeError, binascii.Error) as e:
-    print(f"Error encoding or writing to file: {e}")
-except Exception as general_error:
-    print(f"Unexpected error: {general_error}")
+        return encoded_content
+
+    except (UnicodeDecodeError, binascii.Error) as e:
+        print(f"Error encoding content: {e}")
+        raise
+    except Exception as general_error:
+        print(f"Unexpected error during encoding: {general_error}")
+        raise
+
+def write_to_file(filename: str, content: str):
+    """
+    将内容写入指定文件。
+    """
+    try:
+        with open(filename, "w") as file:
+            file.write(content)
+        print(f"Content successfully written to {filename}.")
+    except (UnicodeDecodeError, binascii.Error) as e:
+        print(f"Error writing to file: {e}")
+        raise
+    except Exception as general_error:
+        print(f"Unexpected error during file writing: {general_error}")
+        raise
+
+if __name__ == "__main__":
+    merged_content = "Your content here"  # 将此处替换为实际内容
+
+    encoded_content = encode_content(merged_content)
+    write_to_file("./sub/shadowrocket_base64.txt", encoded_content)
