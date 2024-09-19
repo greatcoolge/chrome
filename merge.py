@@ -221,10 +221,12 @@ def process_hysteria2(data, index):
         obfs_password = json_data.get("obfs_password", "")
         sni = json_data.get("sni", "")
 
+        # 检查是否所有必需字段都存在
         if not all([server, password, obfs, obfs_password, sni]):
             missing_fields = [field for field in ["server", "password", "insecure", "obfs", "obfs_password", "sni"]
                               if not json_data.get(field)]
             logging.warning(f"在索引 {index} 的 hysteria2 数据中缺少必需的字段：{', '.join(missing_fields)}")
+            logging.debug(f"数据内容：{json_data}")  # 输出数据内容以供调试
             return
 
         location = get_physical_location(server)
@@ -233,6 +235,7 @@ def process_hysteria2(data, index):
         merged_proxies.append(hysteria2)
     except Exception as e:
         logging.error(f"处理索引 {index} 的 hysteria2 数据时出错：{e}")
+
 
 #处理xray
 def process_xray(data, index):
