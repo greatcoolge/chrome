@@ -7,7 +7,7 @@ import logging
 import geoip2.database
 import socket
 import re
-
+import binascii
 # 提取节点
 def process_urls(url_file, processor):
     try:
@@ -301,11 +301,13 @@ process_urls('./urls/xray_urls.txt', process_xray)
 merged_content = "\n".join(merged_proxies)
 
 try:
-    encoded_content = base64.b64encode(merged_content.encode("utf-8")).decode("utf-8")
+    # 将内容进行 URL 安全的 Base64 编码
+    encoded_content = base64.urlsafe_b64encode(merged_content.encode("utf-8")).decode("utf-8")
     
+    # 将 Base64 URL 编码的内容写入文件
     with open("./sub/shadowrocket_base64.txt", "w") as encoded_file:
         encoded_file.write(encoded_content)
         
     print("Content successfully encoded and written to shadowrocket_base64.txt.")
-except Exception as e:
+except (UnicodeDecodeError, binascii.Error) as e:
     print(f"Error encoding and writing to file: {e}")
