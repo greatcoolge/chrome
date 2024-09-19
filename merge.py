@@ -125,44 +125,46 @@ def process_clash(data, index):
                              f"&downmbps={down_mbps}&alpn={alpn}&mport={port}&obfs={obfs}&protocol={protocol}&fastopen={fast_open}#{name}")
             merged_proxies.append(hysteria_meta)
 
-        elif proxy_type == 'ssr' and server and port:
-            password = base64.b64encode(proxy.get("password", "").encode()).decode()
-            cipher = proxy.get("cipher", "")
-            obfs = proxy.get("obfs", "")
-            protocol = proxy.get("protocol", "")
-            protocol_param = base64.b64encode(proxy.get("protocol-param", "").encode()).decode()
-            obfs_param = base64.b64encode(proxy.get("obfs-param", "").encode()).decode()
-            ssr_source = (f"{server}:{port}:{protocol}:{cipher}:{obfs}:{password}/?obfsparam={obfs_param}"
-                          f"&protoparam={protocol_param}&remarks=ssr_meta_{index}")
-            ssr_source = base64.b64encode(ssr_source.encode()).decode()
-            ssr_meta = f"ssr://{ssr_source}"
-            merged_proxies.append(ssr_meta)
+    #    elif proxy_type == 'ssr' and server and port:
+    #        password = base64.b64encode(proxy.get("password", "").encode()).decode()
+    #        cipher = proxy.get("cipher", "")
+    #        obfs = proxy.get("obfs", "")
+    #        protocol = proxy.get("protocol", "")
+    #        protocol_param = base64.b64encode(proxy.get("protocol-param", "").encode()).decode()
+    #        obfs_param = base64.b64encode(proxy.get("obfs-param", "").encode()).decode()
+    #        ssr_source = (f"{server}:{port}:{protocol}:{cipher}:{obfs}:{password}/?obfsparam={obfs_param}"
+    #                      f"&protoparam={protocol_param}&remarks=ssr_meta_{index}")
+    #        ssr_source = base64.b64encode(ssr_source.encode()).decode()
+    #        ssr_meta = f"ssr://{ssr_source}"
+    #        merged_proxies.append(ssr_meta)
 
-        elif proxy_type == 'sstest' and server and port:
-            password = proxy.get("password", "")
-            cipher = proxy.get("cipher", "")
-            ss_source = f"{cipher}:{password}@{server}:{port}"
-            ss_source = base64.b64encode(ss_source.encode()).decode()
-            ss_meta = f"ss://{ss_source}"
-            merged_proxies.append(ss_meta)
+    #    elif proxy_type == 'sstest' and server and port:
+    #        password = proxy.get("password", "")
+    #        cipher = proxy.get("cipher", "")
+    #        ss_source = f"{cipher}:{password}@{server}:{port}"
+    #        ss_source = base64.b64encode(ss_source.encode()).decode()
+    #        ss_meta = f"ss://{ss_source}"
+    #        merged_proxies.append(ss_meta)
 
 
-def process_naive(data, index):
-    try:
-        json_data = json.loads(data)
-        proxy_str = json_data.get("proxy", "")
-        if proxy_str:
-            naiveproxy = base64.b64encode(proxy_str.encode()).decode()
-            merged_proxies.append(naiveproxy)
-        else:
-            logging.warning(f"No proxy string found in naive data for index {index}.")
+#def process_naive(data, index):
+#    try:
+#        json_data = json.loads(data)
+#        proxy_str = json_data.get("proxy", "")
+#        if proxy_str:
+#            naiveproxy = base64.b64encode(proxy_str.encode()).decode()
+#            merged_proxies.append(naiveproxy)
+#        else:
+#            logging.warning(f"No proxy string found in naive data for index {index}.")
     except Exception as e:
         logging.error(f"Error processing naive data for index {index}: {e}")
+
 
 def process_sb(data, index):
     try:
         json_data = json.loads(data)
         outbounds = json_data.get("outbounds", [])
+        
         if len(outbounds) > 1:
             server = outbounds[1].get("server", "")
             server_port = outbounds[1].get("server_port", "")
@@ -180,12 +182,18 @@ def process_sb(data, index):
         if server and server_port and method and password:
             ss = f"{method}:{password}@{server}:{server_port}"
             shadowtls = f'{{"version": "{version}", "host": "{host}", "password": "{shadowtls_password}"}}'
-            shadowtls_proxy = "ss://"+base64.b64encode(ss.encode()).decode()+"?shadow-tls="+base64.b64encode(shadowtls.encode()).decode()+f"#shadowtls{index}"
+            
+            # 使用 URL 安全的 Base64 编码
+            ss_encoded = base64.urlsafe_b64encode(ss.encode()).decode()
+            shadowtls_encoded = base64.urlsafe_b64encode(shadowtls.encode()).decode()
+            
+            shadowtls_proxy = f"ss://{ss_encoded}?shadow-tls={shadowtls_encoded}#shadowtls{index}"
             merged_proxies.append(shadowtls_proxy)
         else:
             logging.warning(f"Missing required fields in sb data for index {index}.")
     except Exception as e:
         logging.error(f"Error processing shadowtls data for index {index}: {e}")
+
 
 def process_hysteria(data, index):
     try:
@@ -329,8 +337,9 @@ def process_xray(data, index):
 
                 if server and method and password and port:
                     ss_source = f"{method}:{password}@{server}:{port}"
-                    ss_source = base64.b64encode(ss_source.encode()).decode()
-                    xray_proxy = f"ss://{ss_source}#{index}"
+                    # 使用 URL 安全的 Base64 编码
+                    ss_source_encoded = base64.urlsafe_b64encode(ss_source.encode()).decode()
+                    xray_proxy = f"ss://{ss_source_encoded}#{index}"
                     merged_proxies.append(xray_proxy)
                 else:
                     logging.warning(f"Missing required fields in shadowsocks data for index {index}.")
