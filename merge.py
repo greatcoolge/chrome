@@ -300,14 +300,23 @@ process_urls('./urls/xray_urls.txt', process_xray)
 # 将结果写入文件
 merged_content = "\n".join(merged_proxies)
 
-try:
-    # 将内容进行 URL 安全的 Base64 编码
-    encoded_content = base64.urlsafe_b64encode(merged_content.encode("utf-8")).decode("utf-8")
-    
-    # 将 Base64 URL 编码的内容写入文件
-    with open("./sub/shadowrocket_base64.txt", "w") as encoded_file:
-        encoded_file.write(encoded_content)
+# 过滤掉包含 '127.0.0.1' 的无效节点或空节点
+valid_proxies = [proxy for proxy in merged_proxies if '127.0.0.1' not in proxy and proxy.strip()]
+
+# 如果 valid_proxies 为空，避免继续编码处理
+if not valid_proxies:
+    print("No valid proxies found.")
+else:
+    merged_content = "\n".join(valid_proxies)
+
+    try:
+        # 进行 Base64 编码
+        encoded_content = base64.urlsafe_b64encode(merged_content.encode("utf-8")).decode("utf-8")
         
-    print("Content successfully encoded and written to shadowrocket_base64.txt.")
-except (UnicodeDecodeError, binascii.Error) as e:
-    print(f"Error encoding and writing to file: {e}")
+        # 写入文件
+        with open("./sub/shadowrocket_base64.txt", "w") as encoded_file:
+            encoded_file.write(encoded_content)
+        
+        print("Content successfully encoded and written to shadowrocket_base64.txt.")
+    except Exception as e:
+        print(f"Error encoding and writing to file: {e}")
