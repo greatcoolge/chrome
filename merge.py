@@ -2,6 +2,7 @@ import base64
 import json
 import urllib.request
 import yaml
+import os
 import codecs
 import logging
 import geoip2.database
@@ -365,51 +366,50 @@ process_urls('./urls/xray_urls.txt', process_xray)
 # 将结果写入文件
 merged_content = "\n".join(merged_proxies)
 
-
-
 def encode_content(content: str) -> str:
-    """
-    对内容进行 URL 安全的 Base64 编码。
-    如果内容已经编码过，则跳过编码过程。
-    """
-    try:
-        # 检查内容是否已经是 Base64 编码的
-        try:
-            # 尝试解码以检查是否已经编码
-            base64.urlsafe_b64decode(content.encode("utf-8")).decode("utf-8")
-            print("Content was already encoded, skipping re-encoding.")
-            encoded_content = content  # 如果已经编码过，就不需要再编码
-        except (UnicodeDecodeError, binascii.Error):
-            # 如果解码失败，说明内容未被编码，进行编码
-            encoded_content = base64.urlsafe_b64encode(content.encode("utf-8")).decode("utf-8")
-            print("Content successfully encoded.")
-        
-        return encoded_content
+    """对内容进行 Base64 编码"""
+    return base64.b64encode(content.encode('utf-8')).decode('utf-8')
 
-    except (UnicodeDecodeError, binascii.Error) as e:
-        print(f"Error encoding content: {e}")
-        raise
-    except Exception as general_error:
-        print(f"Unexpected error during encoding: {general_error}")
-        raise
-
-def write_to_file(filename: str, content: str):
-    """
-    将内容写入指定文件。
-    """
+def decode_content(content: str) -> str:
+    """尝试解码 Base64 编码的内容"""
     try:
-        with open(filename, "w") as file:
+        # 添加 padding 以确保解码成功
+        padded_content = content + '=' * ((4 - len(content) % 4) % 4)
+        return base64.b64decode(padded_content.encode('utf-8')).decode('utf-8')
+    except (UnicodeDecodeError, binascii.Error):
+        return None  # 返回 None 表示内容未编码
+
+def process_content(content: str) -> str:
+    """处理内容：解码已编码内容，编码未编码内容"""
+    decoded_content = decode_content(content)
+    if decoded_content is not None:
+        # 内容已编码，直接返回
+        print("Content was already encoded, skipping re-encoding.")
+        return content
+    else:
+        # 内容未编码，进行编码
+        print("Content was not encoded, encoding now.")
+        return encode_content(content)
+
+def write_to_file(file_path: str, content: str):
+    """将内容写入文件"""
+    try:
+        with open(file_path, "w") as file:
             file.write(content)
-        print(f"Content successfully written to {filename}.")
-    except (UnicodeDecodeError, binascii.Error) as e:
+        print(f"Content successfully written to {file_path}.")
+    except Exception as e:
         print(f"Error writing to file: {e}")
-        raise
-    except Exception as general_error:
-        print(f"Unexpected error during file writing: {general_error}")
-        raise
 
-if __name__ == "__main__":
-    merged_content = "Your content here"  # 将此处替换为实际内容
+# 假设 merged_content 已在代码其他部分赋值
+# merged_content = "\n".join(merged_proxies) # 示例：合并后的内容
 
-    encoded_content = encode_content(merged_content)
-    write_to_file("./sub/shadowrocket_base64.txt", encoded_content)
+# 处理内容（解码或编码）
+processed_content = process_content(merged_content)
+
+# 确保输出目录存在
+output_dir = "./sub"
+os.makedirs(output_dir, exist_ok=True)
+
+# 写入处理后的内容到文件
+output_file = os.path.join(output_dir, "shadowrocket_base64.txt")
+write_to_file(output_file, processed_content)
