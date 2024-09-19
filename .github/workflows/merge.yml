@@ -1,4 +1,4 @@
-name: TCP代理测试
+name: merge script
 
 on:
   schedule:
@@ -24,6 +24,9 @@ jobs:
     - name: Install dependencies
       run: pip install -r requirements.txt  # 安装requests等依赖
 
+    - name: Run shadowrocket merge script
+      run: python merge.py 
+    
     - name: Run merge script
       run: python merged_proxies.py  # 运行合并脚本
 
