@@ -214,26 +214,37 @@ def process_hysteria(data, index):
 def process_hysteria2(data, index):
     try:
         json_data = json.loads(data)
+        
+        # 动态获取字段
         server = json_data.get("server", "")
-        password = json_data.get("password", "")
-        insecure = int(json_data.get("insecure", 0))
-        obfs = json_data.get("obfs", "")
-        obfs_password = json_data.get("obfs_password", "")
-        sni = json_data.get("sni", "")
-
-        # 检查是否所有必需字段都存在
-        missing_fields = [field for field in ["server", "password", "insecure", "obfs", "obfs_password", "sni"]
-                          if not json_data.get(field)]
+        auth = json_data.get("auth", "")
+        tls_settings = json_data.get("tls", {})
+        insecure = int(tls_settings.get("insecure", 0))  # 将布尔值转换为整数
+        obfs = json_data.get("obfs", "")  # 如果字段不存在，设为空字符串
+        obfs_password = json_data.get("obfs_password", "")  # 如果字段不存在，设为空字符串
+        sni = tls_settings.get("sni", "")
+        
+        # 检查必需字段并记录警告
+        missing_fields = []
+        if not server:
+            missing_fields.append("server")
+        if not auth:
+            missing_fields.append("auth")
+        if "insecure" not in tls_settings:
+            missing_fields.append("insecure")
+        if not sni:
+            missing_fields.append("sni")
         
         if missing_fields:
             logging.warning(f"在索引 {index} 的 hysteria2 数据中缺少必需的字段：{', '.join(missing_fields)}")
             logging.debug(f"数据内容：{json_data}")  # 输出数据内容以供调试
             return
-
+        
         location = get_physical_location(server)
         name = f"{location} hy2 {index}"
-        hysteria2 = (f"hysteria2://{server}:{password}?insecure={insecure}&obfs={obfs}&obfs_password={obfs_password}&sni={sni}#{name}")
+        hysteria2 = (f"hysteria2://{server}?auth={auth}&insecure={insecure}&obfs={obfs}&obfs_password={obfs_password}&sni={sni}#{name}")
         merged_proxies.append(hysteria2)
+        
     except Exception as e:
         logging.error(f"处理索引 {index} 的 hysteria2 数据时出错：{e}")
 
