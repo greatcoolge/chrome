@@ -366,13 +366,22 @@ process_urls('./urls/xray_urls.txt', process_xray)
 merged_content = "\n".join(merged_proxies)
 
 try:
-    # 将内容进行 URL 安全的 Base64 编码
-    encoded_content = base64.urlsafe_b64encode(merged_content.encode("utf-8")).decode("utf-8")
-    
+    # 检查内容是否已经是 Base64 编码的
+    try:
+        decoded_content = base64.urlsafe_b64decode(merged_content.encode("utf-8")).decode("utf-8")
+        print("Content was already encoded, skipping re-encoding.")
+        encoded_content = merged_content  # 如果已经编码过，就不需要再编码
+    except (UnicodeDecodeError, binascii.Error):
+        # 如果解码失败，说明内容未被编码，进行编码
+        encoded_content = base64.urlsafe_b64encode(merged_content.encode("utf-8")).decode("utf-8")
+        print("Content successfully encoded.")
+
     # 将 Base64 URL 编码的内容写入文件
     with open("./sub/shadowrocket_base64.txt", "w") as encoded_file:
         encoded_file.write(encoded_content)
         
-    print("Content successfully encoded and written to shadowrocket_base64.txt.")
+    print("Content successfully written to shadowrocket_base64.txt.")
 except (UnicodeDecodeError, binascii.Error) as e:
-    print(f"Error encoding and writing to file: {e}")
+    print(f"Error encoding or writing to file: {e}")
+except Exception as general_error:
+    print(f"Unexpected error: {general_error}")
