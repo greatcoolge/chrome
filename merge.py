@@ -156,8 +156,8 @@ def process_clash(data, index):
 #            merged_proxies.append(naiveproxy)
 #        else:
 #            logging.warning(f"No proxy string found in naive data for index {index}.")
-    except Exception as e:
-        logging.error(f"Error processing naive data for index {index}: {e}")
+#    except Exception as e:
+#        logging.error(f"Error processing naive data for index {index}: {e}")
 
 
 def process_sb(data, index):
