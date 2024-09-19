@@ -220,16 +220,20 @@ def process_hysteria2(data, index):
         obfs = json_data.get("obfs", "")
         obfs_password = json_data.get("obfs_password", "")
         sni = json_data.get("sni", "")
-        
-        if server and password:
-            location = get_physical_location(server)
-            name = f"{location} hy2 {index}"
-            hysteria2 = (f"hysteria2://{server}:{password}?insecure={insecure}&obfs={obfs}&obfs_password={obfs_password}&sni={sni}#{name}")
-            merged_proxies.append(hysteria2)
-        else:
-            logging.warning(f"Missing required fields in hysteria2 data for index {index}.")
+
+        if not all([server, password, obfs, obfs_password, sni]):
+            missing_fields = [field for field in ["server", "password", "insecure", "obfs", "obfs_password", "sni"]
+                              if not json_data.get(field)]
+            logging.warning(f"在索引 {index} 的 hysteria2 数据中缺少必需的字段：{', '.join(missing_fields)}")
+            return
+
+        location = get_physical_location(server)
+        name = f"{location} hy2 {index}"
+        hysteria2 = (f"hysteria2://{server}:{password}?insecure={insecure}&obfs={obfs}&obfs_password={obfs_password}&sni={sni}#{name}")
+        merged_proxies.append(hysteria2)
     except Exception as e:
-        logging.error(f"Error processing hysteria2 data for index {index}: {e}")
+        logging.error(f"处理索引 {index} 的 hysteria2 数据时出错：{e}")
+
 #处理xray
 def process_xray(data, index):
     try:
