@@ -337,7 +337,7 @@ process_urls('./urls/xray_urls.txt', process_xray)
 unique_proxies = list({(proxy['server'], proxy['port'], proxy['uuid']): proxy for proxy in merged_proxies}.values())
 
 # 将去重后的节点写入 YAML 文件
-with open('./sub/merged_proxies.yaml', 'w', encoding='utf-8') as file:
+with open('./sub/merged_proxies1.yaml', 'w', encoding='utf-8') as file:
     yaml.dump({'proxies': unique_proxies}, file, sort_keys=False, allow_unicode=True)
 
 print("聚合并去重完成")
