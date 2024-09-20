@@ -328,14 +328,11 @@ process_urls('./urls/clashmeta.txt', process_clash)
 process_urls('./urls/hysteria2_urls.txt', process_hysteria2)
 process_urls('./urls/xray_urls.txt', process_xray)
 
-import os
-import yaml
 
-# 创建一个字典以存储唯一的代理
 unique_proxies_dict = {}
 
 for proxy in merged_proxies:
-    key = (proxy['server'], proxy['port'])  # 只使用 server 和 port 作为键
+    key = (proxy['server'], proxy['port'])
 
     # 如果字典中没有这个键，则添加
     if key not in unique_proxies_dict:
@@ -343,8 +340,23 @@ for proxy in merged_proxies:
     else:
         # 如果键已经存在，进一步检查 uuid
         existing_proxy = unique_proxies_dict[key]
-        if existing_proxy.get('uuid') != proxy.get('uuid'):
-            # 如果 uuid 不同，选择保留第一个，跳过重复项
+        current_uuid = proxy.get('uuid', None)
+        existing_uuid = existing_proxy.get('uuid', None)
+
+        # 条件：uuid 不同视为不同节点，uuid 相同或一个没 uuid 视为相同节点
+        if current_uuid != existing_uuid:
+            # 保留不同的 uuid 节点
+            if current_uuid is not None and existing_uuid is not None:
+                # 如果两个节点都有 uuid，但不同，则保留当前节点作为新的唯一节点
+                unique_proxies_dict[(key, current_uuid)] = proxy
+            else:
+                # 如果一个节点有 uuid，一个节点没有 uuid，则保留它们作为不同节点
+                if current_uuid is not None:
+                    unique_proxies_dict[(key, current_uuid)] = proxy
+                elif existing_uuid is not None:
+                    unique_proxies_dict[(key, existing_uuid)] = existing_proxy
+        else:
+            # uuid 相同或都没有 uuid，则保留一个，跳过其他
             continue
 
 # 转换回列表形式
@@ -361,7 +373,6 @@ with open(output_file, 'w', encoding='utf-8') as file:
     yaml.dump({'proxies': unique_proxies}, file, sort_keys=False, allow_unicode=True)
 
 print(f"聚合并去重完成，文件保存在: {output_file}")
-
 
 
 
