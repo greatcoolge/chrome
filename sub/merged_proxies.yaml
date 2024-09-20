@@ -1,19 +1,4 @@
 proxies:
-- name: US vmess 01
-  type: vmess
-  server: 104.19.32.88
-  port: 2086
-  uuid: e9e3cc13-db48-4cc1-8c24-7626439a5339
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  network: ws
-  servername: ip5-10.freegradely.xyz
-  ws-opts:
-    path: github.com/Alvin9999
-    headers:
-      Host: ip5-10.freegradely.xyz
 - name: CA vmess 02
   type: vmess
   server: 23.227.38.8
