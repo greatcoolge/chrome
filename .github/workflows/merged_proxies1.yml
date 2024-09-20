@@ -52,3 +52,5 @@ jobs:
           git push
         else
           echo "No changes detected in the repository."
+        fi  # <-- 添加 `fi` 以正确关闭 if 语句
+
