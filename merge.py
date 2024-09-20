@@ -372,6 +372,9 @@ process_urls('./urls/clash_quick.txt', process_clash)
 # 处理 xray URLs
 process_urls('./urls/xray_urls.txt', process_xray)
 
+
+filtered_proxies = [proxy for proxy in merged_proxies if proxy.strip() and "127.0.0.1" not in proxy]
+
 # 将结果写入文件
 merged_content = "\n".join(merged_proxies)
 
