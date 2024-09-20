@@ -7,12 +7,7 @@ import geoip2.database
 import socket
 import re
 # 将国家代码转换为国旗的函数
-import re
-import socket
-import requests
-import geoip2.database
 import geoip2.errors
-import logging
 # 添加调试信息
 import os
 
@@ -333,14 +328,17 @@ process_urls('./urls/clashmeta.txt', process_clash)
 process_urls('./urls/hysteria2_urls.txt', process_hysteria2)
 process_urls('./urls/xray_urls.txt', process_xray)
 
-# 使用 (server, port, uuid) 作为唯一标识来去重
-unique_proxies = list({(proxy['server'], proxy['port'], proxy['uuid']): proxy for proxy in merged_proxies}.values())
+unique_proxies = list({
+    (proxy['server'], proxy['port'], proxy.get('uuid', '')): proxy  # 使用 proxy.get('uuid', '')，避免 KeyError
+    for proxy in merged_proxies
+}.values())
 
 # 将去重后的节点写入 YAML 文件
-with open('./sub/merged_proxies1.yaml', 'w', encoding='utf-8') as file:
+with open('./sub/merged_proxies.yaml', 'w', encoding='utf-8') as file:
     yaml.dump({'proxies': unique_proxies}, file, sort_keys=False, allow_unicode=True)
 
 print("聚合并去重完成")
+
 
 
 
