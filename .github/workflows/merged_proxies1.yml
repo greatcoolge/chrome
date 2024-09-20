@@ -27,7 +27,7 @@ jobs:
     - name: Run merge script1
       run: python merged_proxies1.py  # 运行合并脚本
 
-   - name: Commit changes
+    - name: Commit changes
       run: |
         if [[ -n "$(git status --porcelain)" ]]; then
           echo "Changes detected in the repository."
