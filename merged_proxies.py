@@ -8,12 +8,7 @@ import geoip2.database
 import socket
 import re
 # 将国家代码转换为国旗的函数
-import re
-import socket
-import requests
-import geoip2.database
 import geoip2.errors
-import logging
 # 添加调试信息
 import os
 
@@ -395,11 +390,51 @@ process_urls('./urls/sb_urls.txt', process_sb)
 process_urls('./urls/hysteria2_urls.txt', process_hysteria2)
 process_urls('./urls/xray_urls.txt', process_xray)
 
-# 将合并后的代理列表写入 YAML 文件
-with open('./sub/merged_proxies.yaml', 'w', encoding='utf-8') as file:
-    yaml.dump({'proxies': merged_proxies}, file, sort_keys=False, allow_unicode=True)
+unique_proxies_dict = {}
 
-print("聚合完成")
+for proxy in merged_proxies:
+    key = (proxy['server'], proxy['port'])
+
+    # 如果字典中没有这个键，则添加
+    if key not in unique_proxies_dict:
+        unique_proxies_dict[key] = proxy
+    else:
+        # 如果键已经存在，进一步检查 uuid
+        existing_proxy = unique_proxies_dict[key]
+        current_uuid = proxy.get('uuid', None)
+        existing_uuid = existing_proxy.get('uuid', None)
+
+        # 条件：uuid 不同视为不同节点，uuid 相同或一个没 uuid 视为相同节点
+        if current_uuid != existing_uuid:
+            # 保留不同的 uuid 节点
+            if current_uuid is not None and existing_uuid is not None:
+                # 如果两个节点都有 uuid，但不同，则保留当前节点作为新的唯一节点
+                unique_proxies_dict[(key, current_uuid)] = proxy
+            else:
+                # 如果一个节点有 uuid，一个节点没有 uuid，则保留它们作为不同节点
+                if current_uuid is not None:
+                    unique_proxies_dict[(key, current_uuid)] = proxy
+                elif existing_uuid is not None:
+                    unique_proxies_dict[(key, existing_uuid)] = existing_proxy
+        else:
+            # uuid 相同或都没有 uuid，则保留一个，跳过其他
+            continue
+
+# 转换回列表形式
+unique_proxies = list(unique_proxies_dict.values())
+
+# 确保输出目录存在
+output_dir = './sub'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+# 将去重后的节点写入 YAML 文件
+output_file = os.path.join(output_dir, 'merged_proxies.yaml')
+with open(output_file, 'w', encoding='utf-8') as file:
+    yaml.dump({'proxies': unique_proxies}, file, sort_keys=False, allow_unicode=True)
+
+print(f"聚合并去重完成，文件保存在: {output_file}")
+
 
 
 LATENCY_THRESHOLD = 18  # 设置延迟阈值为 1000 毫秒（5 秒）
