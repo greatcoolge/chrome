@@ -27,9 +27,6 @@ jobs:
     - name: Run shadowrocket merge script
       run: python merge.py 
     
-    - name: Run merge script1
-      run: python merged_proxies1.py  # 运行合并脚本
-
     - name: Run merge script
       run: python merged_proxies.py  # 运行合并脚本
 
