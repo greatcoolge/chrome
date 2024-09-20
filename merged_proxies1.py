@@ -328,16 +328,32 @@ process_urls('./urls/clashmeta.txt', process_clash)
 process_urls('./urls/hysteria2_urls.txt', process_hysteria2)
 process_urls('./urls/xray_urls.txt', process_xray)
 
-unique_proxies = list({
-    (proxy['server'], proxy['port'], proxy.get('uuid', '')): proxy  # 使用 proxy.get('uuid', '')，避免 KeyError
-    for proxy in merged_proxies
-}.values())
+# 创建一个字典以存储唯一的代理
+unique_proxies_dict = {}
+
+for proxy in merged_proxies:
+    key = (proxy['server'], proxy['port'])  # 只使用 server 和 port 作为键
+
+    # 如果字典中没有这个键，则添加
+    if key not in unique_proxies_dict:
+        unique_proxies_dict[key] = proxy
+    else:
+        # 如果键已经存在，进一步检查 uuid
+        existing_proxy = unique_proxies_dict[key]
+        if existing_proxy.get('uuid') != proxy.get('uuid'):
+            # 如果 uuid 不同，可以选择保留其中一个，或根据需要处理
+            # 这里示例选择保留第一个
+            continue  # 跳过重复项
+
+# 转换回列表形式
+unique_proxies = list(unique_proxies_dict.values())
 
 # 将去重后的节点写入 YAML 文件
-with open('./sub/merged_proxies.yaml', 'w', encoding='utf-8') as file:
+with open('./sub/merged_proxies1.yaml', 'w', encoding='utf-8') as file:
     yaml.dump({'proxies': unique_proxies}, file, sort_keys=False, allow_unicode=True)
 
 print("聚合并去重完成")
+
 
 
 
