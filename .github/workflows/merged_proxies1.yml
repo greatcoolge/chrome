@@ -19,10 +19,11 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: 3.11
+        python-version: '3.11'
 
     - name: Install dependencies
-      run: pip install -r requirements.txt  # 安装requests等依赖
+      run: |
+        pip install -r requirements.txt  # 安装 requests 等依赖
 
     - name: Run merge script1
       run: python merged_proxies1.py  # 运行合并脚本
@@ -51,4 +52,3 @@ jobs:
           git push
         else
           echo "No changes detected in the repository."
-        fi
