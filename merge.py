@@ -151,12 +151,15 @@ def process_clash(data, index):
             merged_proxies.append(ss_meta)
 
 
+def is_valid_proxy(server, uuid=None):
+    """检查代理是否有效"""
+    return server and server not in ["127.0.0.1", "localhost"] and (uuid is not None and uuid != "")
+
 def process_naive(data, index):
     try:
         json_data = json.loads(data)
         proxy_str = json_data.get("proxy", "")
         
-        # 过滤无效节点
         if not proxy_str:
             logging.warning(f"跳过无效的naive节点：{json_data}")
             return
@@ -171,14 +174,13 @@ def process_sb(data, index):
         json_data = json.loads(data)
         server = json_data["outbounds"][1].get("server", "")
         server_port = json_data["outbounds"][1].get("server_port", "")
+        method = json_data["outbounds"][0].get("method", "")
+        password = json_data["outbounds"][0].get("password", "")
         
-        # 过滤无效节点
-        if not server or server in ["127.0.0.1", "localhost"] or not server_port:
+        if not is_valid_proxy(server) or not server_port:
             logging.warning(f"跳过无效的shadowtls节点：{json_data}")
             return
 
-        method = json_data["outbounds"][0].get("method", "")
-        password = json_data["outbounds"][0].get("password", "")
         version = int(json_data["outbounds"][1].get("version", 0))
         host = json_data["outbounds"][1]["tls"].get("server_name", "")
         shadowtls_password = json_data["outbounds"][1].get("password", "")
@@ -196,8 +198,7 @@ def process_hysteria(data, index):
         json_data = json.loads(data)
         server = json_data.get("server", "")
         
-        # 过滤无效节点
-        if not server:
+        if not is_valid_proxy(server):
             logging.warning(f"跳过无效的hysteria节点：{json_data}")
             return
 
@@ -226,8 +227,7 @@ def process_hysteria2(data, index):
         json_data = json.loads(data)
         server = json_data.get("server", "")
         
-        # 过滤无效节点
-        if not server:
+        if not is_valid_proxy(server):
             logging.warning(f"跳过无效的hysteria2节点：{json_data}")
             return
 
@@ -245,6 +245,7 @@ def process_hysteria2(data, index):
         merged_proxies.append(hysteria2)
     except Exception as e:
         logging.error(f"Error processing hysteria2 data for index {index}: {e}")
+
 
 
 #处理xray
