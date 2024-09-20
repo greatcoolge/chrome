@@ -328,6 +328,9 @@ process_urls('./urls/clashmeta.txt', process_clash)
 process_urls('./urls/hysteria2_urls.txt', process_hysteria2)
 process_urls('./urls/xray_urls.txt', process_xray)
 
+import os
+import yaml
+
 # 创建一个字典以存储唯一的代理
 unique_proxies_dict = {}
 
@@ -341,18 +344,24 @@ for proxy in merged_proxies:
         # 如果键已经存在，进一步检查 uuid
         existing_proxy = unique_proxies_dict[key]
         if existing_proxy.get('uuid') != proxy.get('uuid'):
-            # 如果 uuid 不同，可以选择保留其中一个，或根据需要处理
-            # 这里示例选择保留第一个
-            continue  # 跳过重复项
+            # 如果 uuid 不同，选择保留第一个，跳过重复项
+            continue
 
 # 转换回列表形式
 unique_proxies = list(unique_proxies_dict.values())
 
+# 确保输出目录存在
+output_dir = './sub'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
 # 将去重后的节点写入 YAML 文件
-with open('./sub/merged_proxies1.yaml', 'w', encoding='utf-8') as file:
+output_file = os.path.join(output_dir, 'merged_proxies.yaml')
+with open(output_file, 'w', encoding='utf-8') as file:
     yaml.dump({'proxies': unique_proxies}, file, sort_keys=False, allow_unicode=True)
 
-print("聚合并去重完成")
+print(f"聚合并去重完成，文件保存在: {output_file}")
+
 
 
 
@@ -368,10 +377,10 @@ for root, dirs, files in os.walk('./sub'):
 # 打印 merged_proxies.yaml 文件的内容
 print("\nContent of merged_proxies.yaml:")
 try:
-    with open('./sub/merged_proxies.yaml', 'r') as file:
+    with open('./sub/merged_proxies1.yaml', 'r') as file:
         print(file.read())
 except FileNotFoundError:
-    print("merged_proxies.yaml file not found.")
+    print("merged_proxies1.yaml file not found.")
 except Exception as e:
     print(f"Error reading file: {e}")
 
