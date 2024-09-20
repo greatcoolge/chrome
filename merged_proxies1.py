@@ -356,7 +356,7 @@ if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
 # 将去重后的节点写入 YAML 文件
-output_file = os.path.join(output_dir, 'merged_proxies.yaml')
+output_file = os.path.join(output_dir, 'merged_proxies1.yaml')
 with open(output_file, 'w', encoding='utf-8') as file:
     yaml.dump({'proxies': unique_proxies}, file, sort_keys=False, allow_unicode=True)
 
