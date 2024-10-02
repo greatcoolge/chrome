@@ -929,21 +929,6 @@ proxies:
     path: /c8a20941-498d-4972-9101-acd290ed594f
     headers:
       Host: ip1.8084726.xyz
-- name: Unknown Country vmess 0100
-  type: vmess
-  server: skk.moe
-  port: 443
-  uuid: c8a20941-498d-4972-9101-acd290ed594f
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: true
-  network: ws
-  servername: ip1.8084726.xyz
-  ws-opts:
-    path: /c8a20941-498d-4972-9101-acd290ed594f
-    headers:
-      Host: ip1.8084726.xyz
 - name: Unknown Country vmess 0101
   type: vmess
   server: www.visa.com
@@ -3856,57 +3841,57 @@ proxies:
       - ip1.589643.xyz
 - name: US vmess 0
   type: vmess
-  server: 104.21.238.111
+  server: 104.21.238.35
   port: 443
-  uuid: 25d1b318-87e8-4c1e-a784-69783be4b30a
+  uuid: 2b0ee439-844b-42fb-8a86-288b65dc20e1
   alterId: 0
   cipher: auto
   network: ws
   tls: true
   servername: ''
   ws-opts:
-    path: dongtaiwang.com
+    path: /2b0ee439-844b-42fb-8a86-288b65dc20e1
     headers:
-      Host: ip1.589643.xyz
+      Host: ip1.9447609.xyz
 - name: US vmess 1
   type: vmess
-  server: 104.21.238.114
+  server: 104.21.238.36
   port: 443
-  uuid: 25d1b318-87e8-4c1e-a784-69783be4b30a
+  uuid: 2b0ee439-844b-42fb-8a86-288b65dc20e1
   alterId: 0
   cipher: auto
   network: ws
   tls: true
   servername: ''
   ws-opts:
-    path: dongtaiwang.com
+    path: /2b0ee439-844b-42fb-8a86-288b65dc20e1
     headers:
-      Host: ip1.589643.xyz
+      Host: ip1.9447609.xyz
 - name: US vmess 2
   type: vmess
-  server: 104.21.238.113
+  server: 104.21.238.37
   port: 443
-  uuid: 25d1b318-87e8-4c1e-a784-69783be4b30a
+  uuid: 2b0ee439-844b-42fb-8a86-288b65dc20e1
   alterId: 0
   cipher: auto
   network: ws
   tls: true
   servername: ''
   ws-opts:
-    path: dongtaiwang.com
+    path: /2b0ee439-844b-42fb-8a86-288b65dc20e1
     headers:
-      Host: ip1.589643.xyz
+      Host: ip1.9447609.xyz
 - name: US vmess 3
   type: vmess
-  server: 104.21.238.112
+  server: 104.21.238.38
   port: 443
-  uuid: 25d1b318-87e8-4c1e-a784-69783be4b30a
+  uuid: 2b0ee439-844b-42fb-8a86-288b65dc20e1
   alterId: 0
   cipher: auto
   network: ws
   tls: true
   servername: ''
   ws-opts:
-    path: dongtaiwang.com
+    path: /2b0ee439-844b-42fb-8a86-288b65dc20e1
     headers:
-      Host: ip1.589643.xyz
+      Host: ip1.9447609.xyz
