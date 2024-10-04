@@ -1154,21 +1154,6 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip2.8084726.xyz
-- name: Unknown Country vmess 092
-  type: vmess
-  server: fbi.gov
-  port: 2095
-  uuid: a63e9c8c-2c04-4b8e-af6a-4a02494a1f0b
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  network: ws
-  servername: ip2.8084726.xyz
-  ws-opts:
-    path: github.com/Alvin9999
-    headers:
-      Host: ip2.8084726.xyz
 - name: Unknown Country vmess 093
   type: vmess
   server: shopify.com
@@ -3764,21 +3749,6 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip2.6016725.xyz
-- name: Unknown Country vmess 093
-  type: vmess
-  server: shopify.com
-  port: 2095
-  uuid: 18d96190-c10f-448f-a82a-2d36df5c3cde
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  network: ws
-  servername: ip2.6016725.xyz
-  ws-opts:
-    path: github.com/Alvin9999
-    headers:
-      Host: ip2.6016725.xyz
 - name: Unknown Country vmess 094
   type: vmess
   server: icook.tw
@@ -5042,21 +5012,6 @@ proxies:
 - name: US vmess 191
   type: vmess
   server: 172.64.166.33
-  port: 2082
-  uuid: 5f3f09ad-89cb-4e94-a7ad-aa8239913555
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  network: ws
-  servername: ip3.6929198.xyz
-  ws-opts:
-    path: github.com/Alvin9999
-    headers:
-      Host: ip3.6929198.xyz
-- name: Unknown Country vmess 192
-  type: vmess
-  server: fbi.gov
   port: 2082
   uuid: 5f3f09ad-89cb-4e94-a7ad-aa8239913555
   alterId: 0
