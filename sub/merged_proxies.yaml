@@ -74,6 +74,21 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip16.6016725.xyz
+- name: US vmess 06
+  type: vmess
+  server: 172.64.99.22
+  port: 2095
+  uuid: 18d96190-c10f-448f-a82a-2d36df5c3cde
+  alterId: 0
+  cipher: auto
+  udp: true
+  tls: false
+  network: ws
+  servername: ip16.6016725.xyz
+  ws-opts:
+    path: github.com/Alvin9999
+    headers:
+      Host: ip16.6016725.xyz
 - name: US vmess 07
   type: vmess
   server: 104.19.21.71
