@@ -2594,3 +2594,10 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip22.6929198.xyz
+- name: US hysteria 0
+  type: hysteria
+  server: 91.149.239.23
+  port: 12345
+  tls: true
+  client-fingerprint: null
+  servername: bing.com
