@@ -1814,6 +1814,21 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: ip30.6929198.xyz
+- name: US vmess 340
+  type: vmess
+  server: 104.19.45.50
+  port: 2082
+  uuid: 5f3f09ad-89cb-4e94-a7ad-aa8239913555
+  alterId: 0
+  cipher: auto
+  udp: true
+  tls: false
+  network: ws
+  servername: ip30.6929198.xyz
+  ws-opts:
+    path: github.com/Alvin9999
+    headers:
+      Host: ip30.6929198.xyz
 - name: US vmess 341
   type: vmess
   server: 104.19.45.90
