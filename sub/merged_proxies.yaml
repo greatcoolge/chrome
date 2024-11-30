@@ -1004,6 +1004,21 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: c6.6016725.xyz
+- name: US vmess 068
+  type: vmess
+  server: 104.21.238.68
+  port: 2095
+  uuid: 18d96190-c10f-448f-a82a-2d36df5c3cde
+  alterId: 0
+  cipher: auto
+  udp: true
+  tls: false
+  network: ws
+  servername: c6.6016725.xyz
+  ws-opts:
+    path: github.com/Alvin9999
+    headers:
+      Host: c6.6016725.xyz
 - name: US vmess 069
   type: vmess
   server: 104.21.238.69
@@ -8402,21 +8417,6 @@ proxies:
 - name: US vmess 0564
   type: vmess
   server: 104.18.114.64
-  port: 2095
-  uuid: 18d96190-c10f-448f-a82a-2d36df5c3cde
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  network: ws
-  servername: c6.6016725.xyz
-  ws-opts:
-    path: github.com/Alvin9999
-    headers:
-      Host: c6.6016725.xyz
-- name: US vmess 0565
-  type: vmess
-  server: 104.18.114.65
   port: 2095
   uuid: 18d96190-c10f-448f-a82a-2d36df5c3cde
   alterId: 0
@@ -43592,21 +43592,6 @@ proxies:
 - name: Unknown Country vmess 3666
   type: vmess
   server: 104.18.114.166
-  port: 2082
-  uuid: 5f3f09ad-89cb-4e94-a7ad-aa8239913555
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  network: ws
-  servername: e6.6929198.xyz
-  ws-opts:
-    path: github.com/Alvin9999
-    headers:
-      Host: e6.6929198.xyz
-- name: Unknown Country vmess 3667
-  type: vmess
-  server: 104.18.114.167
   port: 2082
   uuid: 5f3f09ad-89cb-4e94-a7ad-aa8239913555
   alterId: 0
