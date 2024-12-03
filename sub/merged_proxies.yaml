@@ -3899,21 +3899,6 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: c11.6016725.xyz
-- name: US vmess 0511
-  type: vmess
-  server: 104.18.114.11
-  port: 2095
-  uuid: 18d96190-c10f-448f-a82a-2d36df5c3cde
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  network: ws
-  servername: c11.6016725.xyz
-  ws-opts:
-    path: github.com/Alvin9999
-    headers:
-      Host: c11.6016725.xyz
 - name: US vmess 0512
   type: vmess
   server: 104.18.114.12
@@ -5759,21 +5744,6 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: c11.6016725.xyz
-- name: US vmess 0635
-  type: vmess
-  server: 104.18.114.135
-  port: 2095
-  uuid: 18d96190-c10f-448f-a82a-2d36df5c3cde
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  network: ws
-  servername: c11.6016725.xyz
-  ws-opts:
-    path: github.com/Alvin9999
-    headers:
-      Host: c11.6016725.xyz
 - name: US vmess 0636
   type: vmess
   server: 104.18.114.136
@@ -6227,21 +6197,6 @@ proxies:
 - name: US vmess 0666
   type: vmess
   server: 104.18.114.166
-  port: 2095
-  uuid: 18d96190-c10f-448f-a82a-2d36df5c3cde
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  network: ws
-  servername: c11.6016725.xyz
-  ws-opts:
-    path: github.com/Alvin9999
-    headers:
-      Host: c11.6016725.xyz
-- name: US vmess 0667
-  type: vmess
-  server: 104.18.114.167
   port: 2095
   uuid: 18d96190-c10f-448f-a82a-2d36df5c3cde
   alterId: 0
@@ -11174,7 +11129,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: c11.6016725.xyz
-- name: None vmess 0996
+- name: US vmess 0996
   type: vmess
   server: 162.159.45.246
   port: 2095
@@ -16829,21 +16784,6 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: p8.613055.xyz
-- name: Unknown Country vmess 1623
-  type: vmess
-  server: 104.18.114.123
-  port: 2086
-  uuid: bc65fac2-7dc7-426f-acdd-0779a5035bde
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  network: ws
-  servername: p8.613055.xyz
-  ws-opts:
-    path: github.com/Alvin9999
-    headers:
-      Host: p8.613055.xyz
 - name: Unknown Country vmess 1624
   type: vmess
   server: 104.18.114.124
@@ -20012,21 +19952,6 @@ proxies:
 - name: Unknown Country vmess 1835
   type: vmess
   server: 162.159.45.85
-  port: 2086
-  uuid: bc65fac2-7dc7-426f-acdd-0779a5035bde
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  network: ws
-  servername: p8.613055.xyz
-  ws-opts:
-    path: github.com/Alvin9999
-    headers:
-      Host: p8.613055.xyz
-- name: Unknown Country vmess 1836
-  type: vmess
-  server: 162.159.45.86
   port: 2086
   uuid: bc65fac2-7dc7-426f-acdd-0779a5035bde
   alterId: 0
@@ -27824,21 +27749,6 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: m8.106778.xyz
-- name: Unknown Country vmess 2606
-  type: vmess
-  server: 104.18.114.106
-  port: 8880
-  uuid: 90f8f4dc-8092-4355-9047-05f506f5e9ab
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  network: ws
-  servername: m8.106778.xyz
-  ws-opts:
-    path: github.com/Alvin9999
-    headers:
-      Host: m8.106778.xyz
 - name: Unknown Country vmess 2607
   type: vmess
   server: 104.18.114.107
@@ -31232,6 +31142,21 @@ proxies:
 - name: Unknown Country vmess 2833
   type: vmess
   server: 162.159.45.83
+  port: 8880
+  uuid: 90f8f4dc-8092-4355-9047-05f506f5e9ab
+  alterId: 0
+  cipher: auto
+  udp: true
+  tls: false
+  network: ws
+  servername: m8.106778.xyz
+  ws-opts:
+    path: github.com/Alvin9999
+    headers:
+      Host: m8.106778.xyz
+- name: Unknown Country vmess 2834
+  type: vmess
+  server: 162.159.45.84
   port: 8880
   uuid: 90f8f4dc-8092-4355-9047-05f506f5e9ab
   alterId: 0
@@ -38282,21 +38207,6 @@ proxies:
 - name: Unknown Country vmess 3554
   type: vmess
   server: 104.18.114.54
-  port: 2082
-  uuid: 5f3f09ad-89cb-4e94-a7ad-aa8239913555
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  network: ws
-  servername: e11.6929198.xyz
-  ws-opts:
-    path: github.com/Alvin9999
-    headers:
-      Host: e11.6929198.xyz
-- name: Unknown Country vmess 3555
-  type: vmess
-  server: 104.18.114.55
   port: 2082
   uuid: 5f3f09ad-89cb-4e94-a7ad-aa8239913555
   alterId: 0
