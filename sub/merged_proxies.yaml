@@ -1889,7 +1889,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: m116.164748.xyz
-- name: None vmess 0375
+- name: US vmess 0375
   type: vmess
   server: 104.26.0.125
   port: 2086
@@ -11174,7 +11174,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: m116.164748.xyz
-- name: Unknown Country vmess 0996
+- name: US vmess 0996
   type: vmess
   server: 162.159.45.246
   port: 2086
