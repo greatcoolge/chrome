@@ -3719,7 +3719,7 @@ proxies:
     path: github.com/Alvin9999
     headers:
       Host: m116.164748.xyz
-- name: None vmess 0249
+- name: US vmess 0249
   type: vmess
   server: 104.21.238.249
   port: 2086
